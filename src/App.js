@@ -1,24 +1,38 @@
 import logo from './logo.svg';
 import './App.css';
+import{
+	BrowserRouter as Router,
+	Switch,
+	Route,
+} from "react-router-dom";
+
+import {Top} from './containers/Top.jsx';
+import {SignIn} from './containers/SignIn.jsx';
+import {LogIn} from './containers/LogIn.jsx';
+import {RequestForm} from './containers/RequestForm.jsx';
 
 function App() {
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+	  <Router>
+	  	<Switch>
+	  		<Route exact path="/">
+	  			<Top/>
+	  		</Route>
+	  		<Route exact path="/signin">
+	  			<SignIn/>
+	  		</Route>
+	  		<Route exact path="/login">
+	  			<LogIn/>
+	  		</Route>
+	  		<Route exact path="/users/:userRandomId/request"
+	  				render={({match}) => 
+						<RequestForm
+							match={match}
+						/>
+					}
+	  		/>
+	  	</Switch>
+	  </Router>
   );
 }
 
