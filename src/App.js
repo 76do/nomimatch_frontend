@@ -10,6 +10,7 @@ import {SignIn} from './containers/SignIn.jsx';
 import {LogIn} from './containers/LogIn.jsx';
 import {RequestForm} from './containers/RequestForm.jsx';
 import {Header} from './containers/Header.jsx';
+import {Footer} from './containers/Footer.jsx';
 import { styled, ThemeProvider, createTheme} from '@mui/system';
 
 function App() {
@@ -50,6 +51,7 @@ function App() {
 	  					</Switch>
 					</BaseComponent>
 				</ThemeProvider>
+			<Footer/>
 	  </Router>
   );
 }

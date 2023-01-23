@@ -61,6 +61,7 @@ export const Top = () => {
 	const FunctionTitle = styled('div')({
 		fontFamily: 'HiraKakuProN-W6',
 		fontSize: 40,
+		marginTop: 100,
 		marginBottom: 50, 
 		textAlign: 'center',
 		"@media screen and (max-width:480px)":{
@@ -118,6 +119,15 @@ export const Top = () => {
 					</MainTitleWrapper>
 					<DrinkPersonImage src={DrinkPerson}/>
 				</TopImageWrapper>
+				<Grid container spacing={2} justifyContent='center'>
+					<Grid item>
+						<SignInButton
+						sx={{ mb: 4, bgcolor: 'main.primary' }}
+						variant='outlined'
+						color='inherit'
+						>さっそくはじめる！</SignInButton>
+					</Grid>
+				</Grid>
 				<FunctionTitle>ノミマチ！でできること</FunctionTitle>
 				<Grid container spacing={2} justifyContent='center'>
 					<Grid item md={8}>
@@ -167,7 +177,7 @@ export const Top = () => {
 						sx={{ mb: 4, bgcolor: 'main.primary' }}
 						variant='outlined'
 						color='inherit'
-						>新規登録はこちら！</SignInButton>
+						>登録はこちら!</SignInButton>
 					</Grid>
 				</Grid>
 			</Container>
