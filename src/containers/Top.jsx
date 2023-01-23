@@ -23,6 +23,7 @@ export const Top = () => {
 	const TopImageWrapper = styled('div')({
 		display: 'flex',
 		justifyContent: 'space-between',
+		paddingTop: 70,
 		"@media screen and (max-width:480px)":{
 			justifyContent: 'center',
 			marginBottom: 30,
