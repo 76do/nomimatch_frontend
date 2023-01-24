@@ -23,6 +23,7 @@ function App() {
 	});
 	
 	const BaseComponent = styled('div')(({theme}) => ({
+		minHeight:'100vh',
 		backgroundColor: theme.palette.primary.main,
 	}));
 	
