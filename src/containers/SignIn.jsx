@@ -5,6 +5,8 @@ import Container from '@mui/material/Container';
 import TextField from '@mui/material/TextField';
 import Stack from '@mui/material/Stack';
 import { SubmitHandler, useForm } from 'react-hook-form';
+import { yupResolver } from '@hookform/resolvers/yup';
+import * as yup from 'yup';
 
 export const SignIn = () => {
 
@@ -46,9 +48,33 @@ export const SignIn = () => {
 		borderRadius: 10,
 	});
 
-	const { register, handleSubmit } = useForm();
 
-	const onSubmit = (data) => console.log(data);
+	const schema = yup.object({
+		name: yup
+			.string()
+			.required('必須'),
+		email: yup 
+			.string()
+			.required('必須')
+			.email('正しいメールアドレスを入力してください。'),
+		password: yup
+			.string()
+			.required('必須')
+			.min(3, 'パスワードは3文字以上にしてください。'),
+		passwordConfirmation: yup
+			.string()
+			.required('必須')
+			.oneOf([yup.ref('password')], 'パスワードが一致しません。')
+	})
+
+	const { register, handleSubmit, formState: {errors} } = useForm({
+		resolver: yupResolver(schema),
+		reValidateMode: 'onSubmit',
+	});
+
+	const onSubmit = (data) => {
+		console.log(data.email);
+	};
 
 	return(
 		<Fragment>
@@ -60,21 +86,43 @@ export const SignIn = () => {
 						<TextField 
 						fullWidth 
 						required 
+						label="ユーザー名"  
+						type="name"
+						{...register('name')}
+						error={"name" in errors}
+						helperText={errors.name?.message}
+						/>
+
+						<TextField 
+						fullWidth 
+						required 
 						label="メールアドレス"  
 						type="email"
-						{...register('email')}/>
+						{...register('email')}
+						error={"email" in errors}
+						helperText={errors.email?.message}
+						/>
+
 						<TextField 
 						fullWidth 
 						required 
 						label="パスワード" 
 						type="password"
-						{...register('password')}/>
+						{...register('password')}
+						error={"password" in errors}
+						helperText={errors.password?.message}
+						/>
+
 						<TextField 
 						fullWidth 
 						required 
 						label="パスワード(確認)" 
 						type="password"
-						{...register('passwordConfirmation')}/>
+						{...register('passwordConfirmation')}
+						error={"passwordConfirmation" in errors}
+						helperText={errors.passwordConfirmation?.message}
+						/>
+
 						<SubmitButton
 						sx={{ bgcolor: 'main.primary' }}
 						variant='outlined'
