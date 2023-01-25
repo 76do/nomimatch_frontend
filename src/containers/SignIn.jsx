@@ -7,6 +7,7 @@ import Stack from '@mui/material/Stack';
 import { SubmitHandler, useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 import * as yup from 'yup';
+import { signInRequest } from '../apis/signin';
 
 export const SignIn = () => {
 
@@ -73,7 +74,16 @@ export const SignIn = () => {
 	});
 
 	const onSubmit = (data) => {
-		console.log(data.email);
+		let params = { user:
+						{name: data.name,
+						email: data.email,
+						password: data.password,
+						password_confirmation: data.passwordConfirmation}
+				}
+		signInRequest(params)
+		.then((resData)=>
+			console.log(resData)
+		)
 	};
 
 	return(
