@@ -1,4 +1,4 @@
-import React, {Fragment} from 'react';
+import React, {Fragment, useState} from 'react';
 import Button from '@mui/material/Button';
 import {styled, ThemeProvider, createTheme} from '@mui/material/styles';
 import Container from '@mui/material/Container';
@@ -8,6 +8,8 @@ import { SubmitHandler, useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 import * as yup from 'yup';
 import { signInRequest } from '../apis/signin';
+import Alert from '@mui/material/Alert';
+import { HTTP_STATUS_CODE } from '../constants'
 
 export const SignIn = () => {
 
@@ -73,6 +75,13 @@ export const SignIn = () => {
 		reValidateMode: 'onSubmit',
 	});
 
+	const initialState = {
+		isError: false,
+		errorMessages: [],
+	};
+
+	const[state, setState] = useState(initialState);
+
 	const onSubmit = (data) => {
 		let params = { user:
 						{name: data.name,
@@ -83,13 +92,28 @@ export const SignIn = () => {
 		signInRequest(params)
 		.then((resData)=>
 			console.log(resData)
-		)
+		).catch((e) => {
+			if(e.response.status === HTTP_STATUS_CODE.NOT_ACCEPTABLE){
+				setState({
+					isError: true,
+					errorMessages: e.response.data.errors,
+				})
+			}else{
+				throw e;
+			}
+		})
 	};
+
 
 	return(
 		<Fragment>
 			<ThemeProvider theme={Theme}>
 			<Container maxWidth='lg'>
+				{
+					state.errorMessages.map((message, index)=>{
+						return <Alert severity="error" key={index}>{message}</Alert>
+					})
+				}
 				<SignInTitle>ノミマチ!に登録</SignInTitle>
 					<FormWrapper>
 					<Stack spacing={3} alignItems="center">

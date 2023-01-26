@@ -6,5 +6,7 @@ export const signInRequest = (params) => {
 	.then(res => {
 		return res.data
 	})
-	.catch((e) => console.error(e))
+	.catch(e => {
+		throw e;
+	})
 }
