@@ -23,6 +23,7 @@ export const Top = () => {
 	const TopImageWrapper = styled('div')({
 		display: 'flex',
 		justifyContent: 'space-between',
+		paddingTop: 70,
 		"@media screen and (max-width:480px)":{
 			justifyContent: 'center',
 			marginBottom: 30,
@@ -102,7 +103,7 @@ export const Top = () => {
 	});
 
 	const SignInButton = styled(Button)(({ theme, props }) => ({
-		width: 200,
+		width: 250,
 		fontSize: 15,
 		color: theme.palette.text.primary,
 		fontFamily: 'HiraKakuProN-W6',
@@ -125,7 +126,7 @@ export const Top = () => {
 						sx={{ mb: 4, bgcolor: 'main.primary' }}
 						variant='outlined'
 						color='inherit'
-						>さっそくはじめる！</SignInButton>
+						>飲み会依頼を受け付ける！</SignInButton>
 					</Grid>
 				</Grid>
 				<FunctionTitle>ノミマチ！でできること</FunctionTitle>
