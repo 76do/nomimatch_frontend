@@ -91,9 +91,9 @@ export const SignIn = () => {
 				}
 		signInRequest(params)
 		.then((resData)=>
-			console.log(resData)
+			console.log(resData.headers['AccessToken'])
 		).catch((e) => {
-			if(e.response.status === HTTP_STATUS_CODE.NOT_ACCEPTABLE){
+			if(e.response.status === HTTP_STATUS_CODE.BAD_REQUEST){
 				setState({
 					isError: true,
 					errorMessages: e.response.data.errors,
@@ -111,7 +111,7 @@ export const SignIn = () => {
 			<Container maxWidth='lg'>
 				{
 					state.errorMessages.map((message, index)=>{
-						return <Alert severity="error" key={index}>{message}</Alert>
+						return <Alert severity="error" key={index.toString}>{message}</Alert>
 					})
 				}
 				<SignInTitle>ノミマチ!に登録</SignInTitle>
