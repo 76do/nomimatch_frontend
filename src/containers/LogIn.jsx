@@ -4,7 +4,7 @@ import {styled, ThemeProvider, createTheme} from '@mui/material/styles';
 import Container from '@mui/material/Container';
 import TextField from '@mui/material/TextField';
 import Stack from '@mui/material/Stack';
-import { SubmitHandler, useForm } from 'react-hook-form';
+import { SubmitHandler, useForm, Controller } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 import * as yup from 'yup';
 import { LogInRequest } from '../apis/LogIn';
@@ -51,7 +51,7 @@ export const LogIn = () => {
 		borderRadius: 10,
 	});
 
-	const { register, handleSubmit} = useForm({
+	const { control, register, handleSubmit} = useForm({
 	});
 
 	const initialState = {
@@ -94,21 +94,33 @@ export const LogIn = () => {
 				<LogInTitle>ログイン</LogInTitle>
 					<FormWrapper>
 					<Stack spacing={3} alignItems="center">
-						<TextField 
-						fullWidth 
-						required 
-						label="メールアドレス"  
-						type="email"
-						{...register('email')}
-						/>
+						<Controller
+							name="email"
+							control={control}
+							defaultValue=""
+							render={({field}) => (
+								<TextField 
+								{...field}
+								fullWidth 
+								required 
+								label="メールアドレス"  
+								type="email"
+								/>
+							)}/>
 
-						<TextField 
-						fullWidth 
-						required 
-						label="パスワード" 
-						type="password"
-						{...register('password')}
-						/>
+						<Controller
+							name="password"
+							control={control}
+							defaultValue=""
+							render={({field}) => (
+								<TextField 
+								{...field}
+								fullWidth 
+								required 
+								label="パスワード"  
+								type="password"
+								/>
+							)}/>
 
 						<SubmitButton
 						sx={{ bgcolor: 'main.primary' }}
