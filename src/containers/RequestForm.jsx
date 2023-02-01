@@ -10,7 +10,7 @@ import { yupResolver } from '@hookform/resolvers/yup';
 import * as yup from 'yup';
 import { receiverNameRequest } from '../apis/GetReceiverName';
 import Alert from '@mui/material/Alert';
-import { HTTP_STATUS_CODE } from '../constants'
+import { HTTP_STATUS_CODE, TIME, NUMBER_OF_PEOPLE, BUDGET } from '../constants'
 import Waiters from '../images/Waiters-amico.png';
 import Party from '../images/Work anniversary-bro.png';
 import Workers from '../images/Work anniversary-pana.png';
@@ -20,6 +20,8 @@ import Select from '@mui/material/Select';
 import InputLabel from '@mui/material/InputLabel';
 import FormControl from '@mui/material/FormControl';
 import Slider from '@mui/material/Slider';
+import { RequestDialog } from './RequestDialog';
+import { setAtmosphere } from '../functions/setAtmosphere';
 
 export const RequestForm = ({
 	match
@@ -76,7 +78,7 @@ export const RequestForm = ({
 		paddingTop: 30,
 		paddingRight: 15,
 		paddingLeft: 15,
-		height: 850,
+		paddingBottom: 50,
 		backgroundColor: '#FFFFFF',
 		borderRadius: 10,
 	});
@@ -116,6 +118,9 @@ export const RequestForm = ({
 		name: yup
 			.string()
 			.required('必須'),
+		shop: yup
+			.string()
+			.url('URLではありません'),
 	})
 
 
@@ -125,18 +130,32 @@ export const RequestForm = ({
 	});
 
 	const initialState = {
-		receiverName: '',
+		isSent: false,
+		isOpenDialog: false,
 		condition: false,
 		errorMessages: [],
 	};
 
+	const initialRequest = {
+		receiverName: '',
+		name: "",
+		shop: "",
+		time: "",
+		numberOfPeople: "",
+		budget: "",
+		atmosphere: "",
+		message: "",
+	};
+
 	const[state, setState] = useState(initialState);
+	const[request, setRequest] = useState(initialRequest);
 
 	useEffect(() => {
 		receiverNameRequest(match.params.userRandomId)
-		.then((data) => 
-			setState({...state, condition: true, receiverName: data.data.attributes.name})
-		).catch((e) => {
+		.then((data) => {
+			setState({...state, condition: true})
+			setRequest({...request, receiverName: data.data.attributes.name, message: `${data.data.attributes.name}さん！飲みに行きたいです！!`})
+		}).catch((e) => {
 			if(e.response.status === HTTP_STATUS_CODE.BAD_REQUEST){
 				setState({
 					...state,
@@ -150,27 +169,22 @@ export const RequestForm = ({
 
 
 	const onSubmit = (data) => {
-		let params = { user:
-						{name: data.name,
-						email: data.email,
-						password: data.password,
-						password_confirmation: data.passwordConfirmation}
-				}
-		receiverNameRequest(params.userRandomId)
-		.then((resData)=>
-			console.log(resData)
-		).catch((e) => {
-			if(e.response.status === HTTP_STATUS_CODE.BAD_REQUEST){
-				setState({
-					...state,
-					errorMessages: e.response.data.errors,
-				})
-			}else{
-				throw e;
-			}
-		})
+		let params = {
+						name: data.name,
+						shop: data.shop,
+						time: TIME[data.time],
+						numberOfPeople: NUMBER_OF_PEOPLE[data.numberOfPeople],
+						budget: BUDGET[data.budget],
+						atmosphere: setAtmosphere(data.atmosphere),
+						message: data.message,
+					 }
+		setRequest({...request, ...params})
+		setState({...state, isOpenDialog: true})
 	};
 
+	const sendRequest = () => {
+		setState({...state, isSent: true})
+	};
 
 	return(
 		<Fragment>
@@ -184,9 +198,9 @@ export const RequestForm = ({
 				{
 					state.condition  &&
 					<Fragment>
-						<RequestFormTitle><ReceiverName>{state.receiverName}</ReceiverName>さん宛の飲み会依頼</RequestFormTitle>
+						<RequestFormTitle><ReceiverName>{request.receiverName}</ReceiverName>さん宛の飲み会依頼</RequestFormTitle>
 						<RequestFormDescription>
-						以下フォームから{state.receiverName}さん宛に飲み会依頼を送信できます！<br/>
+						以下フォームから{request.receiverName}さん宛に飲み会依頼を送信できます！<br/>
 						行きたいお店や希望解散時間等、あなたの希望を自由に記載してください！
 						</RequestFormDescription>
 						<Grid container spacing={2}>
@@ -207,6 +221,7 @@ export const RequestForm = ({
 						<Controller
 							name="name"
 							control={control}
+							defaultValue=""
 							render={({ field }) => (
 								<TextField 
 								{...field}
@@ -223,12 +238,15 @@ export const RequestForm = ({
 						<Controller
 							name="shop"
 							control={control}
+							defaultValue=""
 							render={({ field }) => (
 								<TextField 
 								{...field}
 								fullWidth 
 								label="行きたいお店のURL"  
-								type="name"
+								type="url"
+								error={!!errors.shop}
+								helperText={errors.shop?.message}
 							/>
 							)}
 						/>
@@ -236,6 +254,7 @@ export const RequestForm = ({
 						<Controller
 							name="time"
 							control={control}
+							defaultValue={0}
 							render={({ field }) => (
 								<FormControl fullWidth>
 									<InputLabel>希望解散時間</InputLabel>
@@ -263,6 +282,7 @@ export const RequestForm = ({
 						<Controller
 							name="numberOfPeople"
 							control={control}
+							defaultValue={0}
 							render={({ field }) => (
 								<FormControl fullWidth>
 									<InputLabel>希望人数</InputLabel>
@@ -284,6 +304,7 @@ export const RequestForm = ({
 						<Controller
 							name="budget"
 							control={control}
+							defaultValue={0}
 							render={({ field }) => (
 								<FormControl fullWidth>
 									<InputLabel>予算</InputLabel>
@@ -303,6 +324,7 @@ export const RequestForm = ({
 								</FormControl>
 							)}
 						/>
+
 						<AtmosphereWrapper>
 							<AtmosphereTitle>
 							雰囲気
@@ -318,8 +340,14 @@ export const RequestForm = ({
 							<Controller
 							name="atmosphere"
 							control={control}
+							defaultValue={50}
 							render={({ field }) => (
-								<Slider defaultValue={50} aria-label="Default" valueLabelDisplay="auto" sx={{ color: 'gold'}}/>
+								<Slider 
+								{...field}
+								defaultValue={50} 
+								aria-label="Default" 
+								valueLabelDisplay="auto" 
+								sx={{ color: 'gold'}}/>
 							)}
 							/>
 						</AtmosphereWrapper>
@@ -327,6 +355,7 @@ export const RequestForm = ({
 						<Controller
 							name="message"
 							control={control}
+							defaultValue={request.message}
 							render={({ field }) => (
 								<TextField 
 								{...field}
@@ -334,8 +363,8 @@ export const RequestForm = ({
 								label="フリー記述"  
 								multiline
 								minRows={8}
-								defaultValue={`例：${state.receiverName}さん！飲みに連れて行ってください！!`}
-							/>
+								type="text"
+								/>
 							)}
 						/>
 
@@ -363,6 +392,21 @@ export const RequestForm = ({
 					</Fragment>
 				}
 			</Container>
+			{
+				state.isOpenDialog &&
+				<RequestDialog
+				isSent={state.isSent}
+				sendRequest={sendRequest}
+				userId={match.params.userRandomId}
+				request={request}
+				isOpen={state.isOpenDialog}
+				onClose={() => setState({
+					...state,
+					isOpenDialog: false,
+					isSent: false,
+				})}
+				/>
+			}
 			</ThemeProvider>
 		</Fragment>
 	)
