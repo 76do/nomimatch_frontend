@@ -55,7 +55,6 @@ export const LogIn = () => {
 	});
 
 	const initialState = {
-		isError: false,
 		errorMessages: [],
 	};
 
@@ -72,7 +71,6 @@ export const LogIn = () => {
 		).catch((e) => {
 			if(e.response.status === HTTP_STATUS_CODE.UNAUTHORIZED){
 				setState({
-					isError: true,
 					errorMessages: e.response.data.errors,
 				})
 			}else{

@@ -1,4 +1,4 @@
-import React, {Fragment, useState} from 'react';
+import React, {Fragment, useState, useEffect} from 'react';
 import Button from '@mui/material/Button';
 import {styled, ThemeProvider, createTheme} from '@mui/material/styles';
 import Container from '@mui/material/Container';
@@ -43,10 +43,10 @@ export const SignIn = () => {
 	const FormWrapper = styled('div')({
 		margin:'0 auto',
 		paddingTop: 30,
+		paddingBottom: 30,
 		paddingRight: 15,
 		paddingLeft: 15,
 		width: 350,
-		height: 400,
 		backgroundColor: '#FFFFFF',
 		borderRadius: 10,
 	});
@@ -109,6 +109,9 @@ export const SignIn = () => {
 		})
 	};
 
+	useEffect(()=> {
+		window.scrollTo({ top: 0, behavior: "smooth"})
+	}, [errors])
 
 	return(
 		<Fragment>
@@ -121,7 +124,7 @@ export const SignIn = () => {
 				}
 				<SignInTitle>ノミマチ!に登録</SignInTitle>
 					<FormWrapper>
-					<Stack spacing={3} alignItems="center" >
+					<Stack spacing={3} alignItems="center">
 						<Controller
 							name="name"
 							control={control}

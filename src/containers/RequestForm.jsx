@@ -9,6 +9,7 @@ import { SubmitHandler, useForm, Controller } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 import * as yup from 'yup';
 import { receiverNameRequest } from '../apis/GetReceiverName';
+import { Request } from '../apis/Request';
 import Alert from '@mui/material/Alert';
 import { HTTP_STATUS_CODE, TIME, NUMBER_OF_PEOPLE, BUDGET } from '../constants'
 import Waiters from '../images/Waiters-amico.png';
@@ -161,30 +162,48 @@ export const RequestForm = ({
 					...state,
 					errorMessages: e.response.data.errors,
 				})
+				console.log("hoge")
+				window.scrollTo({ top: 0, behavior: "smooth"})
 			}else{
 				throw e;
 			}
 		})
 	},[])
 
-
 	const onSubmit = (data) => {
 		let params = {
 						name: data.name,
 						shop: data.shop,
-						time: TIME[data.time],
-						numberOfPeople: NUMBER_OF_PEOPLE[data.numberOfPeople],
-						budget: BUDGET[data.budget],
-						atmosphere: setAtmosphere(data.atmosphere),
+						time: data.time,
+						numberOfPeople: data.numberOfPeople,
+						budget: data.budget,
+						atmosphere: data.atmosphere,
 						message: data.message,
 					 }
 		setRequest({...request, ...params})
 		setState({...state, isOpenDialog: true})
 	};
 
-	const sendRequest = () => {
-		setState({...state, isSent: true})
+	const sendRequest = (userId, params) => {
+		Request(userId, params)
+		.then((resData)=>
+			setState({...state, isSent: true})
+		).catch((e) => {
+			if(e.response.status === HTTP_STATUS_CODE.BAD_REQUEST){
+				setState({
+					...state,
+					isOpenDialog: false,
+					errorMessages: e.response.data.errors,
+				})
+			}else{
+				throw e;
+			}
+		})
 	};
+
+	useEffect(()=> {
+		window.scrollTo({ top: 0, behavior: "smooth"})
+	}, [errors])
 
 	return(
 		<Fragment>
@@ -192,6 +211,7 @@ export const RequestForm = ({
 			<Container maxWidth='lg'>
 				{
 					state.errorMessages.map((message, index)=>{
+						window.scrollTo({ top: 0, behavior: "smooth"})
 						return <Alert severity="error" key={index.toString}>{message}</Alert>
 					})
 				}
@@ -396,8 +416,7 @@ export const RequestForm = ({
 				state.isOpenDialog &&
 				<RequestDialog
 				isSent={state.isSent}
-				sendRequest={sendRequest}
-				userId={match.params.userRandomId}
+				sendRequest={() => sendRequest(match.params.userRandomId, request)}
 				request={request}
 				isOpen={state.isOpenDialog}
 				onClose={() => setState({

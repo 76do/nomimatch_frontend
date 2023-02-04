@@ -9,13 +9,13 @@ import {styled, ThemeProvider, createTheme} from '@mui/material/styles';
 import Stack from '@mui/material/Stack';
 import Cheers from '../images/Beer Celebration-rafiki.png';
 import { Request } from '../apis/Request';
-import { HTTP_STATUS_CODE } from '../constants'
+import { HTTP_STATUS_CODE, TIME, NUMBER_OF_PEOPLE, BUDGET } from '../constants'
+import { setAtmosphere } from '../functions/setAtmosphere';
 
 
 export const RequestDialog = ({
 	isSent,
 	sendRequest,
-	userId,
 	request,
 	isOpen,
 	onClose,
@@ -116,10 +116,10 @@ export const RequestDialog = ({
 		</div>
 		{ request.shop && <br/>}
 		{ request.shop && <p><RequestItemName>行きたいお店: </RequestItemName>{request.shop}</p>}
-		{ request.time && <p><RequestItemName>希望解散時間: </RequestItemName>{request.time}</p>}
-		{ request.numberOfPeople && <p><RequestItemName>希望人数: </RequestItemName>{request.numberOfPeople}</p>}
-		{ request.budget && <p><RequestItemName>予算: </RequestItemName>{request.budget}</p>}
-		{ request.atmosphere && <p><RequestItemName>飲み会の雰囲気: </RequestItemName>{request.atmosphere}</p>}
+		{ <p><RequestItemName>希望解散時間: </RequestItemName>{TIME[request.time]}</p>}
+		{ <p><RequestItemName>希望人数: </RequestItemName>{NUMBER_OF_PEOPLE[request.numberOfPeople]}</p>}
+		{ <p><RequestItemName>予算: </RequestItemName>{BUDGET[request.budget]}</p>}
+		{ request.atmosphere && <p><RequestItemName>飲み会の雰囲気: </RequestItemName>{setAtmosphere(request.atmosphere)}</p>}
 		{ request.message && <p><RequestItemName>メッセージ: </RequestItemName>{request.message}</p>}
 		</RequestWrapper>
 		</ContentWrapper>
