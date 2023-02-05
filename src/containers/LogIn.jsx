@@ -1,4 +1,4 @@
-import React, {Fragment, useState} from 'react';
+import React, {Fragment, useState, useContext} from 'react';
 import Button from '@mui/material/Button';
 import {styled, ThemeProvider, createTheme} from '@mui/material/styles';
 import Container from '@mui/material/Container';
@@ -10,6 +10,12 @@ import * as yup from 'yup';
 import { LogInRequest } from '../apis/LogIn';
 import Alert from '@mui/material/Alert';
 import { HTTP_STATUS_CODE } from '../constants'
+import { LoginFlagContext } from '../providers/LoginFlagProvider';
+import { UserInfoContext } from '../providers/UserInfoProvider';
+import{
+	useHistory,
+	Redirect,
+} from "react-router-dom";
 
 export const LogIn = () => {
 
@@ -60,15 +66,23 @@ export const LogIn = () => {
 
 	const[state, setState] = useState(initialState);
 
+	const history = useHistory();
+
+	const { setAccessToken } = useContext(LoginFlagContext);
+	const { setUserInfo } = useContext(UserInfoContext);
+
 	const onSubmit = (data) => {
 		let params = { 
 						email: data.email,
 						password: data.password,
 					 }
 		LogInRequest(params)
-		.then((resData)=>
-			console.log(resData)
-		).catch((e) => {
+		.then((resData)=>{
+			console.log(resData);
+			setAccessToken(resData.headers['accesstoken']);
+			setUserInfo(resData['data']['data']['attributes'])
+			history.push("/mypage");
+		}).catch((e) => {
 			if(e.response.status === HTTP_STATUS_CODE.UNAUTHORIZED){
 				setState({
 					errorMessages: e.response.data.errors,

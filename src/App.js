@@ -5,6 +5,7 @@ import{
 	Route,
 } from "react-router-dom";
 
+import React from 'react';
 import {Top} from './containers/Top.jsx';
 import {SignIn} from './containers/SignIn.jsx';
 import {LogIn} from './containers/LogIn.jsx';
@@ -29,6 +30,7 @@ function App() {
 	}));
 	
   	return (
+		<React.StrictMode>
 	  	<Router>
 	  		<Header/>
 				<ThemeProvider theme={Theme}>
@@ -57,7 +59,8 @@ function App() {
 					</BaseComponent>
 				</ThemeProvider>
 			<Footer/>
-	  </Router>
+	  	</Router>
+		</React.StrictMode>
   );
 }
 

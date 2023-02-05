@@ -6,3 +6,4 @@ export const userRequest = (userId) =>
 	`${DEFAULT_API_LOCALHOST}/users/${userId}/requests`
 export const receiverName = (userId) =>
 	`${DEFAULT_API_LOCALHOST}/users/${userId}/name`
+export const requests = `${DEFAULT_API_LOCALHOST}/user/requests`
