@@ -4,14 +4,18 @@ import{
 	Switch,
 	Route,
 } from "react-router-dom";
-
+import React from 'react';
 import {Top} from './containers/Top.jsx';
 import {SignIn} from './containers/SignIn.jsx';
 import {LogIn} from './containers/LogIn.jsx';
 import {RequestForm} from './containers/RequestForm.jsx';
+import {MyPage} from './containers/MyPage.jsx';
 import {Header} from './containers/Header.jsx';
+import {LoginHeader} from './containers/LoginHeader.jsx';
 import {Footer} from './containers/Footer.jsx';
+import {NotReady} from './containers/NotReady.jsx';
 import { styled, ThemeProvider, createTheme} from '@mui/system';
+import { useCookies } from 'react-cookie';
 
 function App() {
 	const Theme = createTheme({
@@ -26,16 +30,26 @@ function App() {
 		minHeight:'100vh',
 		backgroundColor: theme.palette.primary.main,
 	}));
-	
+
+	const cookies = useCookies(['accessToken'])[0];
+
   	return (
 	  	<Router>
-	  		<Header/>
+			{
+				cookies.accessToken && 
+				<LoginHeader/>
+			}
+			{
+				!cookies.accessToken && 
+				<Header/>
+
+			}
 				<ThemeProvider theme={Theme}>
 					<BaseComponent>
 	  					<Switch>
 	  						<Route exact path="/">
-	  							<Top/>
-	  						</Route>
+								<Top/>
+							</Route>
 	  						<Route exact path="/signin">
 	  							<SignIn/>
 	  						</Route>
@@ -49,11 +63,17 @@ function App() {
 										/>
 									}
 	  						/>
+	  						<Route exact path="/mypage">
+	  							<MyPage loginNotice={false}/>
+	  						</Route>
+	  						<Route path="/notready">
+	  							<NotReady/>
+	  						</Route>
 	  					</Switch>
 					</BaseComponent>
 				</ThemeProvider>
 			<Footer/>
-	  </Router>
+	  	</Router>
   );
 }
 

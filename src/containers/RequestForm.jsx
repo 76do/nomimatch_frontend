@@ -1,17 +1,16 @@
 import React, {Fragment, useState, useEffect} from 'react';
-import Box from '@mui/material/Box';
 import Button from '@mui/material/Button';
 import {styled, ThemeProvider, createTheme} from '@mui/material/styles';
 import Container from '@mui/material/Container';
 import TextField from '@mui/material/TextField';
 import Stack from '@mui/material/Stack';
-import { SubmitHandler, useForm, Controller } from 'react-hook-form';
+import { useForm, Controller } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 import * as yup from 'yup';
 import { receiverNameRequest } from '../apis/GetReceiverName';
 import { Request } from '../apis/Request';
 import Alert from '@mui/material/Alert';
-import { HTTP_STATUS_CODE, TIME, NUMBER_OF_PEOPLE, BUDGET } from '../constants'
+import { HTTP_STATUS_CODE } from '../constants'
 import Waiters from '../images/Waiters-amico.png';
 import Party from '../images/Work anniversary-bro.png';
 import Workers from '../images/Work anniversary-pana.png';
@@ -22,7 +21,6 @@ import InputLabel from '@mui/material/InputLabel';
 import FormControl from '@mui/material/FormControl';
 import Slider from '@mui/material/Slider';
 import { RequestDialog } from './RequestDialog';
-import { setAtmosphere } from '../functions/setAtmosphere';
 
 export const RequestForm = ({
 	match
@@ -110,11 +108,6 @@ export const RequestForm = ({
 		color: theme.palette.text.primary,
 	}));
 
-	const FreeMessageWrapper = styled('div')({
-		width: '100%',
-		height: 200,
-	});
-
 	const schema = yup.object({
 		name: yup
 			.string()
@@ -162,7 +155,6 @@ export const RequestForm = ({
 					...state,
 					errorMessages: e.response.data.errors,
 				})
-				console.log("hoge")
 				window.scrollTo({ top: 0, behavior: "smooth"})
 			}else{
 				throw e;
@@ -185,9 +177,10 @@ export const RequestForm = ({
 	};
 
 	const sendRequest = (userId, params) => {
+		setState({...state, isOpenDialog: false})
 		Request(userId, params)
 		.then((resData)=>
-			setState({...state, isSent: true})
+			setState({...state, isSent: true, isOpenDialog: true})
 		).catch((e) => {
 			if(e.response.status === HTTP_STATUS_CODE.BAD_REQUEST){
 				setState({

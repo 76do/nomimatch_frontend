@@ -10,8 +10,10 @@ import {styled, ThemeProvider, createTheme} from '@mui/material/styles';
 import{
 	useHistory,
 } from "react-router-dom";
+import { LogOut } from '../apis/LogOut';
+import { useCookies } from 'react-cookie';
 
-export const Header = () => {
+export const LoginHeader = () => {
 
 	const Theme = createTheme({
 		palette: {
@@ -27,6 +29,11 @@ export const Header = () => {
 		},
 	});
 
+	const history = useHistory();
+	const cookiesArray = useCookies(["accessToken"]);
+	const cookies = cookiesArray[0]
+	const removeCookie = cookiesArray[2]
+
 	const NomimatchAppBar = styled(AppBar)(({ theme }) => ({
 		backgroundColor: theme.palette.background.primary,
 	}));
@@ -39,7 +46,17 @@ export const Header = () => {
 		borderRadius: 50,
 	}));
 
-	const history = useHistory();
+	const logout = () => {
+		if(window.confirm('ログアウトしますか？')){
+		LogOut(cookies["accessToken"])
+		.then(() => {
+			removeCookie('accessToken')
+			history.push("/",{logoutNotice: true})
+		}).catch(
+		)}
+	};
+
+
   	return (
 	  	<ThemeProvider theme={Theme}>
     		<Box sx={{ flexGrow: 1 }}>
@@ -65,16 +82,14 @@ export const Header = () => {
 							variant='outlined'
 							color='inherit'
 							onClick={()=>{
-								history.push("/signin");
+								history.push("/mypage", {loginNotice: false});
 							}}
-							>新規登録</HeaderButton>
+							>マイページ</HeaderButton>
           					<HeaderButton
 							variant='outlined'
 							color='inherit'
-							onClick={()=>{
-								history.push("/login");
-							}}
-							>ログイン</HeaderButton>
+							onClick={logout}
+							>ログアウト</HeaderButton>
         				</Toolbar>
 	  				</Container>
       			</NomimatchAppBar>
