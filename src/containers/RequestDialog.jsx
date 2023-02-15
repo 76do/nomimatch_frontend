@@ -1,16 +1,16 @@
-import React, { Fragment, useState } from 'react';
+import React, { Fragment } from 'react';
 import Dialog from '@mui/material/Dialog';
 import DialogActions from '@mui/material/DialogActions';
 import DialogContent from '@mui/material/DialogContent';
-import DialogContentText from '@mui/material/DialogContentText';
 import DialogTitle from '@mui/material/DialogTitle';
 import Button from '@mui/material/Button';
 import {styled, ThemeProvider, createTheme} from '@mui/material/styles';
-import Stack from '@mui/material/Stack';
 import Cheers from '../images/Beer Celebration-rafiki.png';
-import { Request } from '../apis/Request';
-import { HTTP_STATUS_CODE, TIME, NUMBER_OF_PEOPLE, BUDGET } from '../constants'
+import { TIME, NUMBER_OF_PEOPLE, BUDGET } from '../constants'
 import { setAtmosphere } from '../functions/setAtmosphere';
+import{
+	useHistory,
+} from "react-router-dom";
 
 
 export const RequestDialog = ({
@@ -91,6 +91,8 @@ export const RequestDialog = ({
 		marginTop: 30,
 	});
 
+	const history = useHistory();
+
 	return (
 		<ThemeProvider theme={Theme}>
 		<Dialog
@@ -154,6 +156,9 @@ export const RequestDialog = ({
 				sx={{ bgcolor: 'main.primary' }}
 				variant='outlined'
 				color='inherit'
+				onClick={()=>{
+					history.push("/", {logoutNotice: false});
+				}}
 				>
 				トップページへ
 				</SubmitButton>

@@ -1,15 +1,9 @@
-import React, { Fragment, useState, useContext } from 'react';
+import React, { Fragment, useContext } from 'react';
 import Dialog from '@mui/material/Dialog';
-import DialogActions from '@mui/material/DialogActions';
 import DialogContent from '@mui/material/DialogContent';
-import DialogContentText from '@mui/material/DialogContentText';
 import DialogTitle from '@mui/material/DialogTitle';
-import Button from '@mui/material/Button';
 import {styled, ThemeProvider, createTheme} from '@mui/material/styles';
-import Stack from '@mui/material/Stack';
-import Cheers from '../images/Beer Celebration-rafiki.png';
-import { Request } from '../apis/Request';
-import { HTTP_STATUS_CODE, TIME, NUMBER_OF_PEOPLE, BUDGET } from '../constants'
+import { TIME, NUMBER_OF_PEOPLE, BUDGET } from '../constants'
 import { setAtmosphere } from '../functions/setAtmosphere';
 import { UserInfoContext } from '../providers/UserInfoProvider';
 
@@ -62,27 +56,6 @@ export const RequestHistoryDialog = ({
 
 	const RequestItemName = styled('span')({
 		fontWeight: 'bold',
-	});
-
-	const  ActionsWrapper = styled('div')({
-		margin: '0 auto',
-	});
-
-	const SubmitButton = styled(Button)(({ theme }) => ({
-		width: 200,
-		fontSize: 15,
-		color: theme.palette.text.primary,
-		fontFamily: 'HiraKakuProN-W6',
-		borderRadius: 50,
-		marginBottom: 20,
-	}));
-
-	const ImageWrapper = styled('div')({
-		textAlign: 'center',
-	});
-
-	const RequestFinishImage = styled('img')({
-		width: '70%',
 	});
 	
 	const {userInfo} = useContext(UserInfoContext);

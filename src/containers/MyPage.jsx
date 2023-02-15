@@ -1,17 +1,11 @@
-import React, {Fragment, useState, useContext, useEffect} from 'react';
-import Button from '@mui/material/Button';
+import React, {Fragment, useState, useContext, useLayoutEffect} from 'react';
 import {styled, ThemeProvider, createTheme} from '@mui/material/styles';
 import Container from '@mui/material/Container';
 import TextField from '@mui/material/TextField';
 import Stack from '@mui/material/Stack';
-import { SubmitHandler, useForm, Controller } from 'react-hook-form';
-import { yupResolver } from '@hookform/resolvers/yup';
-import * as yup from 'yup';
-import { LogInRequest } from '../apis/LogIn';
 import { getUserRequests } from '../apis/GetRequests';
+import { getCurrentUser } from '../apis/GetCurrentUserInfo';
 import Alert from '@mui/material/Alert';
-import { HTTP_STATUS_CODE } from '../constants';
-import { LoginFlagContext } from '../providers/LoginFlagProvider';
 import { UserInfoContext } from '../providers/UserInfoProvider';
 import ListItem from '@mui/material/ListItem';
 import ListItemButton from '@mui/material/ListItemButton';
@@ -19,6 +13,12 @@ import ListItemText from '@mui/material/ListItemText';
 import { FixedSizeList } from 'react-window';
 import MarkAsUnreadOutlinedIcon from '@mui/icons-material/MarkAsUnreadOutlined';
 import { RequestHistoryDialog } from './RequestHistoryDialog';
+import { useCookies } from 'react-cookie';
+import Fade from '@mui/material/Fade';
+import CircularProgress from '@mui/material/CircularProgress';
+import{
+	useLocation
+} from "react-router-dom";
 
 export const MyPage = () => {
 	const Theme = createTheme({
@@ -35,8 +35,12 @@ export const MyPage = () => {
 		},
 	});
 
+	const MessageWrapper = styled('div')({
+		width: '100%',
+		height: 90,
+	});
+
 	const MyPageTitle = styled('div')({
-		paddingTop: 70,
 		fontSize: 30,
 		"@media screen and (max-width:480px)":{
 			fontSize: 27,
@@ -48,25 +52,6 @@ export const MyPage = () => {
 	const UserName = styled('span')(({ theme }) => ({
 		color: theme.palette.main.primary,
 	}));
-
-	const SubmitButton = styled(Button)(({ theme, props }) => ({
-		width: 200,
-		fontSize: 15,
-		color: theme.palette.text.primary,
-		fontFamily: 'HiraKakuProN-W6',
-		borderRadius: 50,
-	}));
-
-	const FormWrapper = styled('div')({
-		margin:'0 auto',
-		paddingTop: 30,
-		paddingRight: 15,
-		paddingLeft: 15,
-		width: 350,
-		height: 300,
-		backgroundColor: '#FFFFFF',
-		borderRadius: 10,
-	});
 
 	const MyPageWrapper = styled('div')({
 		display: 'flex',
@@ -188,82 +173,125 @@ export const MyPage = () => {
 		atmosphere: "",
 		message: "",
 	}
-	
-	const loginInfo = useContext(LoginFlagContext);
+
+	const initialFetchState = {
+		fetching: true,
+		fetched: false
+	}
+
+	const cookies  = useCookies(['accessToken'])[0];
 	const {userInfo, setUserInfo} = useContext(UserInfoContext);
 	const [requests, setRequests] = useState([]);
 	const [state, setState] = useState(initialState);
 	const [dialogInfo, setDialogInfo] = useState(initialDialogInfo);
+	const [fetchState, setFetchState] = useState(initialFetchState);
+	const location = useLocation();
 
-	useEffect(() => {
-		getUserRequests(loginInfo['accessToken'])	
+	useLayoutEffect(() => {
+		window.scrollTo({ top: 0, behavior: "smooth"})
+		getCurrentUser(cookies.accessToken)
+		.then((data) => {
+			setUserInfo({name: data['data']['attributes']['name'],random_id: data['data']['attributes']['random_id'] })
+		}).catch((e) => {
+		})
+		getUserRequests(cookies.accessToken)
 		.then((data) => {
 			setRequests(data["data"]);
-			console.log(data["data"].length)
-			console.log(data["data"].length !== 0)
 			if(data["data"].length !== 0){
 				setState({...state, hasRequests: true});
 			}else{
 				setState({...state, isRequestsEmpty: true})
 			}
+			setFetchState({fetching: false, fetched: true})
 		}).catch((e) => {
 		})
-	}, [])
-
-	useEffect(() => {
-		console.log(state.isRequestEmpty)
-	}, [state]);
+	},[])
 
 	return(
 		<Fragment>
 			<ThemeProvider theme={Theme}>
 			<Container maxWidth='lg'>
-				<Stack spacing={8} alignItems="center">	
-				<MyPageTitle><UserName>{userInfo.name}</UserName>さん、おかえりなさい！</MyPageTitle>
-				<MyPageWrapper>
-				<URLWrapper>
-				<URLTitle>以下URLをシェアして、飲み会依頼が届くのを待ちましょう!</URLTitle>
-				<TextField
-				fullWidth
-				label="飲み会依頼入力URL（読み取り専用）"
-				defaultValue={`https://nomimatch.com/users/${userInfo.random_id}/request`}	
-				InputProps={{
-					readOnly: true,
-				}}
-				sx={{ mt: 1}}
-				/>
-				</URLWrapper>
-				<RequestsWrapper>	
-				<RequestTitleWrapper>
-				<MarkAsUnreadOutlinedIcon sx={{mr: 1, color: 'main.primary', fontSize: 30,}}/>
-				<RequestsTitle>
-				あなた宛に届いた飲み会依頼
-				</RequestsTitle>
-				</RequestTitleWrapper>
+			<MessageWrapper>
 				{
-					state.isRequestsEmpty &&
-					<RequestsDescription>
-					飲み会依頼はまだ届いていません！<br/>
-					届くまでもう少々お待ちください。
-					</RequestsDescription>
+					cookies.accessToken === undefined &&
+						<Fade in={true}><Alert severity="error">ログインしてください！</Alert></Fade>
 				}
 				{
-					state.hasRequests &&
-					<RequestsListWrapper>
-					<FixedSizeList
-   					height={400}
-   					width={360}
-   					itemSize={46}
-   					itemCount={requests.length}
-   					overscanCount={5}
-   					>
-   					{renderRow}
-      				</FixedSizeList>
-					</RequestsListWrapper>
+					location.state && location.state.loginNotice &&
+						<Alert severity="success">ログインしました！</Alert>
 				}
-				</RequestsWrapper>	
-				</MyPageWrapper>
-				</Stack>
+			</MessageWrapper>
+				{
+					cookies.accessToken &&
+					<Stack spacing={8} alignItems="center">	
+					{
+					fetchState.fetching &&
+						<MyPageTitle>
+							<CircularProgress/>
+						</MyPageTitle>
+					}
+					{
+					fetchState.fetched &&
+						<MyPageTitle>
+							<UserName>{userInfo.name}</UserName>さん、おかえりなさい！
+						</MyPageTitle>
+					}
+					<MyPageWrapper>
+					<URLWrapper>
+					<URLTitle>以下URLをシェアして、飲み会依頼が届くのを待ちましょう!</URLTitle>
+					{
+					fetchState.fetching &&
+						<CircularProgress/>
+					}
+					{
+					fetchState.fetched &&
+						<TextField
+						fullWidth
+						label="飲み会依頼入力URL（読み取り専用）"
+						defaultValue={`https://nomimatch.com/users/${userInfo.random_id}/request`}	
+						InputProps={{
+							readOnly: true,
+						}}
+						sx={{ mt: 1}}
+						/>
+					}
+					</URLWrapper>
+					<RequestsWrapper>	
+					<RequestTitleWrapper>
+					<MarkAsUnreadOutlinedIcon sx={{mr: 1, color: 'main.primary', fontSize: 30,}}/>
+					<RequestsTitle>
+					あなた宛に届いた飲み会依頼
+					</RequestsTitle>
+					</RequestTitleWrapper>
+						{
+							fetchState.fetching &&
+							<CircularProgress/>
+						}
+						{
+							state.isRequestsEmpty && fetchState.fetched &&
+							<RequestsDescription>
+							飲み会依頼はまだ届いていません！<br/>
+							届くまでもう少々お待ちください。
+							</RequestsDescription>
+						}
+						{
+							state.hasRequests && fetchState.fetched &&
+							<RequestsListWrapper>
+							<FixedSizeList
+   							height={400}
+   							width={360}
+   							itemSize={46}
+   							itemCount={requests.length}
+   							overscanCount={5}
+   							>
+   							{renderRow}
+      						</FixedSizeList>
+							</RequestsListWrapper>
+						}
+					</RequestsWrapper>	
+					</MyPageWrapper>
+					</Stack>
+					}
 			</Container>
 			{
 				state.isOpenDialog &&

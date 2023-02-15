@@ -5,7 +5,10 @@ export const UserInfoContext = createContext({});
 export const UserInfoProvider = props => {
 	const { children } = props;
 
-	const [userInfo, setUserInfo] = useState();
+	const initialState = {
+		name: "",
+	}
+	const [userInfo, setUserInfo] = useState(initialState);
 
 	return(
 		<UserInfoContext.Provider value={{ userInfo, setUserInfo }}>

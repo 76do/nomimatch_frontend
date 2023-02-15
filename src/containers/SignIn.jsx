@@ -4,16 +4,20 @@ import {styled, ThemeProvider, createTheme} from '@mui/material/styles';
 import Container from '@mui/material/Container';
 import TextField from '@mui/material/TextField';
 import Stack from '@mui/material/Stack';
-import { SubmitHandler, useForm, Controller } from 'react-hook-form';
+import { useForm, Controller } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 import * as yup from 'yup';
 import { signInRequest } from '../apis/signin';
 import Alert from '@mui/material/Alert';
 import { HTTP_STATUS_CODE } from '../constants'
+import Fade from '@mui/material/Fade';
+import{
+	useHistory,
+} from "react-router-dom";
+import { useCookies } from 'react-cookie';
 
 export const SignIn = () => {
-
-	const Theme = createTheme({
+const Theme = createTheme({
 		palette: {
 			text: {
 				primary: '#263238',
@@ -24,8 +28,12 @@ export const SignIn = () => {
 		},
 	});
 
+	const MessageWrapper = styled('div')({
+		width: '100%',
+		height: 90,
+	});
+
 	const SignInTitle = styled('div')({
-		paddingTop: 70,
 		marginBottom: 50,
 		fontSize: 30,
 		fontFamily: 'HiraKakuProN-W6',
@@ -81,6 +89,9 @@ export const SignIn = () => {
 	};
 
 	const[state, setState] = useState(initialState);
+	const history = useHistory()
+	const cookiesArray = useCookies(["accessToken"]);
+	const setCookie = cookiesArray[1]
 
 	const onSubmit = (data) => {
 		let params = { user:
@@ -95,6 +106,10 @@ export const SignIn = () => {
 				isError: false,
 				errorMessages: [],
 			})
+			let cookieDate = new Date()
+			cookieDate.setDate(cookieDate.getDate()+7);
+			setCookie("accessToken", resData.headers['accesstoken'], {expires: cookieDate})
+			history.push("/mypage",{loginNotice: true});
 			}
 		).catch((e) => {
 			if(e.response.status === HTTP_STATUS_CODE.BAD_REQUEST){
@@ -102,7 +117,6 @@ export const SignIn = () => {
 					isError: true,
 					errorMessages: e.response.data.errors,
 				})
-				console.log(state)
 			}else{
 				throw e;
 			}
@@ -117,11 +131,13 @@ export const SignIn = () => {
 		<Fragment>
 			<ThemeProvider theme={Theme}>
 			<Container maxWidth='lg'>
+			<MessageWrapper>
 				{
 					state.errorMessages.map((message, index)=>{
-						return <Alert severity="error" key={index.toString}>{message}</Alert>
+						return <Fade in={true}><Alert severity="error" key={index.toString}>{message}</Alert></Fade>
 					})
 				}
+			</MessageWrapper>
 				<SignInTitle>ノミマチ!に登録</SignInTitle>
 					<FormWrapper>
 					<Stack spacing={3} alignItems="center">

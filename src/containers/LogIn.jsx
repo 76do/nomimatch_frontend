@@ -1,21 +1,18 @@
-import React, {Fragment, useState, useContext} from 'react';
+import React, {Fragment, useState} from 'react';
 import Button from '@mui/material/Button';
 import {styled, ThemeProvider, createTheme} from '@mui/material/styles';
 import Container from '@mui/material/Container';
 import TextField from '@mui/material/TextField';
 import Stack from '@mui/material/Stack';
-import { SubmitHandler, useForm, Controller } from 'react-hook-form';
-import { yupResolver } from '@hookform/resolvers/yup';
-import * as yup from 'yup';
+import { useForm, Controller } from 'react-hook-form';
 import { LogInRequest } from '../apis/LogIn';
 import Alert from '@mui/material/Alert';
 import { HTTP_STATUS_CODE } from '../constants'
-import { LoginFlagContext } from '../providers/LoginFlagProvider';
-import { UserInfoContext } from '../providers/UserInfoProvider';
 import{
 	useHistory,
-	Redirect,
 } from "react-router-dom";
+import { useCookies } from 'react-cookie';
+import Fade from '@mui/material/Fade';
 
 export const LogIn = () => {
 
@@ -30,8 +27,12 @@ export const LogIn = () => {
 		},
 	});
 
+	const MessageWrapper = styled('div')({
+		width: '100%',
+		height: 90,
+	});
+
 	const LogInTitle = styled('div')({
-		paddingTop: 70,
 		marginBottom: 50,
 		fontSize: 30,
 		fontFamily: 'HiraKakuProN-W6',
@@ -57,7 +58,7 @@ export const LogIn = () => {
 		borderRadius: 10,
 	});
 
-	const { control, register, handleSubmit} = useForm({
+	const { control, handleSubmit} = useForm({
 	});
 
 	const initialState = {
@@ -68,8 +69,9 @@ export const LogIn = () => {
 
 	const history = useHistory();
 
-	const { setAccessToken } = useContext(LoginFlagContext);
-	const { setUserInfo } = useContext(UserInfoContext);
+	const cookiesArray = useCookies(["accessToken"]);
+	const cookies = cookiesArray[0]
+	const setCookie = cookiesArray[1]
 
 	const onSubmit = (data) => {
 		let params = { 
@@ -78,10 +80,10 @@ export const LogIn = () => {
 					 }
 		LogInRequest(params)
 		.then((resData)=>{
-			console.log(resData);
-			setAccessToken(resData.headers['accesstoken']);
-			setUserInfo(resData['data']['data']['attributes'])
-			history.push("/mypage");
+			let cookieDate = new Date()
+			cookieDate.setDate(cookieDate.getDate()+7);
+			setCookie("accessToken", resData.headers['accesstoken'], {expires: cookieDate})
+			history.push("/mypage",{loginNotice: true});
 		}).catch((e) => {
 			if(e.response.status === HTTP_STATUS_CODE.UNAUTHORIZED){
 				setState({
@@ -98,11 +100,17 @@ export const LogIn = () => {
 		<Fragment>
 			<ThemeProvider theme={Theme}>
 			<Container maxWidth='lg'>
+				<MessageWrapper>
+				{
+					cookies['accessToken'] !== undefined &&
+						<Fade in={true}><Alert severity="warning">既にログインしています。</Alert></Fade>
+				}
 				{
 					state.errorMessages.map((message, index)=>{
-						return <Alert severity="error" key={index.toString}>{message}</Alert>
-					})
+					return <Fade in={true}><Alert severity="error" key={index.toString}>{message}</Alert></Fade>
+				})
 				}
+				</MessageWrapper>
 				<LogInTitle>ログイン</LogInTitle>
 					<FormWrapper>
 					<Stack spacing={3} alignItems="center">

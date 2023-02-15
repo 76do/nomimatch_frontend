@@ -1,3 +1,4 @@
+import React from 'react';
 import Container from '@mui/material/Container';
 import MainLogo from '../images/brandmark-design.png';
 import DrinkPerson from '../images/beer-celebration-cuate.png';
@@ -7,6 +8,13 @@ import Notification from '../images/New notifications-amico.png';
 import Grid from '@mui/material/Grid';
 import Button from '@mui/material/Button';
 import {styled, ThemeProvider, createTheme} from '@mui/material/styles';
+import Alert from '@mui/material/Alert';
+import{
+	useHistory,
+	useLocation,
+} from "react-router-dom";
+import { useCookies } from 'react-cookie';
+import Fade from '@mui/material/Fade';
 
 export const Top = () => {
 	const Theme = createTheme({
@@ -20,10 +28,15 @@ export const Top = () => {
 		},
 	});
 
+	const MessageWrapper = styled('div')({
+		width: '100%',
+		height: 70,
+	});
+
 	const TopImageWrapper = styled('div')({
 		display: 'flex',
 		justifyContent: 'space-between',
-		paddingTop: 70,
+		paddingTop: 10,
 		"@media screen and (max-width:480px)":{
 			justifyContent: 'center',
 			marginBottom: 30,
@@ -110,9 +123,21 @@ export const Top = () => {
 		borderRadius: 50,
 	}));
 
+	const history = useHistory();
+	const cookies  = useCookies(['accessToken'])[0];
+	const location = useLocation();
+
 	return(
 	  		<ThemeProvider theme={Theme}>
 			<Container maxWidth="lg">
+				<MessageWrapper>
+				{
+					location.state && location.state.logoutNotice &&
+					<Fade in={true}>
+						<Alert severity="warning">ログアウトしました！</Alert>
+					</Fade>
+				}
+				</MessageWrapper>
 				<TopImageWrapper>
 					<MainTitleWrapper>
 						<MainLogoImage src={MainLogo}/>
@@ -126,6 +151,13 @@ export const Top = () => {
 						sx={{ mb: 4, bgcolor: 'main.primary' }}
 						variant='outlined'
 						color='inherit'
+						onClick={()=>{
+							if(cookies.accessToken !== undefined){
+								history.push("/mypage", {loginNotice: false});
+							}else{
+								history.push("/signin");
+							}
+						}}
 						>飲み会依頼を受け付ける！</SignInButton>
 					</Grid>
 				</Grid>
@@ -178,10 +210,13 @@ export const Top = () => {
 						sx={{ mb: 4, bgcolor: 'main.primary' }}
 						variant='outlined'
 						color='inherit'
+						onClick={()=>{
+							history.push("/signin");
+						}}
 						>登録はこちら!</SignInButton>
 					</Grid>
 				</Grid>
 			</Container>
 			</ThemeProvider>
 	)
-}
+};

@@ -1,5 +1,8 @@
 import {styled, ThemeProvider, createTheme} from '@mui/material/styles';
 import Button from '@mui/material/Button';
+import{
+	useHistory,
+} from "react-router-dom";
 
 const Theme = createTheme({
 	palette: {
@@ -35,13 +38,29 @@ const FooterButton = styled(Button)(({ theme }) => ({
 	},
 }));
 
+
 export const Footer = () => {
+	const history = useHistory();
 	return(
 		<ThemeProvider theme={Theme} >
 			<FooterWrapper>	
-					<FooterButton>利用規約</FooterButton>
-					<FooterButton>プライバシーポリシー</FooterButton>
-					<FooterButton>お問い合わせ</FooterButton>
+					<FooterButton
+					onClick={()=>{
+						window.scrollTo({ top: 0, behavior: "smooth"})
+						history.push('/notready')
+					}}
+					>利用規約</FooterButton>
+					<FooterButton
+					onClick={()=>{
+						window.scrollTo({ top: 0, behavior: "smooth"})
+						history.push('/notready')
+					}}
+					>プライバシーポリシー</FooterButton>
+					<FooterButton
+					onClick={()=>{
+						window.open('https://forms.gle/kiXQF4zF5hrYUzUe8');
+					}}
+					>お問い合わせ</FooterButton>
 			</FooterWrapper>
 		</ThemeProvider>
 	);

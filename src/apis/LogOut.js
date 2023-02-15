@@ -1,8 +1,8 @@
 import axios from 'axios';
 import { authentication } from '../urls/index';
 
-export const LogInRequest = (params) => {
-	return axios.post(authentication, params)
+export const LogOut = (accessToken) => {
+	return axios.delete(authentication, {headers: { Authorization: `Bearer ${accessToken}`, }})
 	.then(res => {
 		return res
 	})
