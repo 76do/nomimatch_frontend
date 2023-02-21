@@ -45,6 +45,10 @@ export const LogIn = () => {
 		color: theme.palette.text.primary,
 		fontFamily: 'HiraKakuProN-W6',
 		borderRadius: 50,
+		"@media screen and (max-width:480px)":{
+			width: 150,
+			fontSize: 12,
+		},
 	}));
 
 	const FormWrapper = styled('div')({
@@ -56,6 +60,9 @@ export const LogIn = () => {
 		height: 300,
 		backgroundColor: '#FFFFFF',
 		borderRadius: 10,
+		"@media screen and (max-width:480px)":{
+			width: '90%',
+		},
 	});
 
 	const { control, handleSubmit} = useForm({
@@ -82,7 +89,7 @@ export const LogIn = () => {
 		.then((resData)=>{
 			let cookieDate = new Date()
 			cookieDate.setDate(cookieDate.getDate()+7);
-			setCookie("accessToken", resData.headers['accesstoken'], {expires: cookieDate})
+			setCookie("accessToken", resData.headers['accesstoken'], {expires: cookieDate, sameSite: 'none', secure: true})
 			history.push("/mypage",{loginNotice: true});
 		}).catch((e) => {
 			if(e.response.status === HTTP_STATUS_CODE.UNAUTHORIZED){
@@ -127,7 +134,6 @@ export const LogIn = () => {
 								type="email"
 								/>
 							)}/>
-
 						<Controller
 							name="password"
 							control={control}

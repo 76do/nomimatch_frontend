@@ -44,6 +44,10 @@ export const LoginHeader = () => {
 		color: theme.palette.text.primary,
 		fontFamily: 'HiraKakuProN-W6',
 		borderRadius: 50,
+		"@media screen and (max-width:480px)":{
+			width: 100,
+			fontSize: 12,
+		},
 	}));
 
 	const logout = () => {

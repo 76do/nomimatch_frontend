@@ -46,6 +46,10 @@ const Theme = createTheme({
 		color: theme.palette.text.primary,
 		fontFamily: 'HiraKakuProN-W6',
 		borderRadius: 50,
+		"@media screen and (max-width:480px)":{
+			width: 150,
+			fontSize: 12,
+		},
 	}));
 
 	const FormWrapper = styled('div')({
@@ -57,6 +61,9 @@ const Theme = createTheme({
 		width: 350,
 		backgroundColor: '#FFFFFF',
 		borderRadius: 10,
+		"@media screen and (max-width:480px)":{
+			width: '90%',
+		},
 	});
 
 
@@ -108,7 +115,7 @@ const Theme = createTheme({
 			})
 			let cookieDate = new Date()
 			cookieDate.setDate(cookieDate.getDate()+7);
-			setCookie("accessToken", resData.headers['accesstoken'], {expires: cookieDate})
+			setCookie("accessToken", resData.headers['accesstoken'], {expires: cookieDate, sameSite: 'none', secure: true})
 			history.push("/mypage",{loginNotice: true});
 			}
 		).catch((e) => {

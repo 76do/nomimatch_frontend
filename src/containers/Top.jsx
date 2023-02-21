@@ -31,6 +31,9 @@ export const Top = () => {
 	const MessageWrapper = styled('div')({
 		width: '100%',
 		height: 70,
+		"@media screen and (max-width:480px)":{
+			height: 50,
+		},
 	});
 
 	const TopImageWrapper = styled('div')({
@@ -55,7 +58,7 @@ export const Top = () => {
 		color: '#696969',
 		fontSize: 30,
 		"@media screen and (max-width:480px)":{
-			fontSize: 15,
+			fontSize: 13,
 			textAlign: 'center',
 		},
 	});
@@ -63,6 +66,9 @@ export const Top = () => {
 	const MainLogoImage = styled('img')({
 		height: 140,
 		marginBottom: 30,
+		"@media screen and (max-width:480px)":{
+			height: 110,
+		},
 	}); 
 
 	const DrinkPersonImage = styled('img')({
@@ -87,7 +93,7 @@ export const Top = () => {
 
 	const FunctionCompo = styled('div')({
 		"@media screen and (max-width:480px)":{
-			width: 400,
+			width: 300,
 		},
 	});
 
@@ -97,7 +103,7 @@ export const Top = () => {
 		marginBottom: 20, 
 		color: '#333333',
 		"@media screen and (max-width:480px)":{
-			fontSize: 20,
+			fontSize: 15,
 		},
 	});
 
@@ -113,6 +119,9 @@ export const Top = () => {
 
 	const FunctionImage = styled('img')({
 		height: 350,
+		"@media screen and (max-width:480px)":{
+			height: 200,
+		},
 	});
 
 	const SignInButton = styled(Button)(({ theme, props }) => ({
@@ -121,6 +130,10 @@ export const Top = () => {
 		color: theme.palette.text.primary,
 		fontFamily: 'HiraKakuProN-W6',
 		borderRadius: 50,
+		"@media screen and (max-width:480px)":{
+			width: 160,
+			fontSize: 10,
+		},
 	}));
 
 	const history = useHistory();

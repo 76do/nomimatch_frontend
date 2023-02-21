@@ -105,6 +105,9 @@ export const MyPage = () => {
 		borderRadius: 10,
 		border: '3px solid',
 		borderColor: theme.palette.main.primary,
+		"@media screen and (max-width:480px)":{
+			width: '90%',
+		},
 	}));
 
 	const RequestTitleWrapper = styled('div')({
@@ -248,7 +251,7 @@ export const MyPage = () => {
 						<TextField
 						fullWidth
 						label="飲み会依頼入力URL（読み取り専用）"
-						defaultValue={`https://nomimatch.com/users/${userInfo.random_id}/request`}	
+						defaultValue={`https://www.nomimatch.com/users/${userInfo.random_id}/request`}	
 						InputProps={{
 							readOnly: true,
 						}}
