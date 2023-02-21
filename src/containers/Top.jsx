@@ -195,7 +195,7 @@ export const Top = () => {
 						<FunctionHeadline>②専用フォームから飲み会依頼を作成</FunctionHeadline>
 						<FunctionDescription>
 						①で作成したURLから飲み会依頼作成フォームへ遷移します。<br/>		
-						フォームでは、希望解散時間や予算、飲み会の雰囲気等を細かく指定し、<br/>
+						フォームでは、希望解散時間や予算、飲み会の雰囲気等を細かく指定でき、<br/>
 						無理なく上司に飲み会の要望を伝えることができます!
 						</FunctionDescription>
 						</FunctionCompo>
@@ -209,7 +209,7 @@ export const Top = () => {
 						<FunctionCompo>
 						<FunctionHeadline>③通知機能</FunctionHeadline>
 						<FunctionDescription>
-						あなた宛に届いた飲み会依頼を通知でお知らせします!<br/>		
+						あなた宛に届いた飲み会依頼をメールでお知らせします!<br/>		
 						</FunctionDescription>
 						</FunctionCompo>
 					</Grid>
