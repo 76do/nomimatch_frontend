@@ -39,7 +39,7 @@ export const Header = () => {
 		borderRadius: 50,
 		"@media screen and (max-width:480px)":{
 			width: 100,
-			fontSize: 12,
+			fontSize: 10,
 		},
 	}));
 
