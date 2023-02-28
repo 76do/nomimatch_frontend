@@ -14,8 +14,8 @@ import {Header} from './containers/Header.jsx';
 import {LoginHeader} from './containers/LoginHeader.jsx';
 import {Footer} from './containers/Footer.jsx';
 import {NotReady} from './containers/NotReady.jsx';
-import { styled, ThemeProvider, createTheme} from '@mui/system';
-import { useCookies } from 'react-cookie';
+import {styled, ThemeProvider, createTheme} from '@mui/system';
+import {useCookies} from 'react-cookie';
 
 function App() {
 	const Theme = createTheme({

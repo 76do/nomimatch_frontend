@@ -21,10 +21,12 @@ import InputLabel from '@mui/material/InputLabel';
 import FormControl from '@mui/material/FormControl';
 import Slider from '@mui/material/Slider';
 import { RequestDialog } from './RequestDialog';
+import {usePageTracking} from '../functions/useTracking';
 
 export const RequestForm = ({
 	match
 }) => {
+	usePageTracking();
 	const Theme = createTheme({
 		palette: {
 			text: {

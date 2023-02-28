@@ -19,8 +19,10 @@ import CircularProgress from '@mui/material/CircularProgress';
 import{
 	useLocation
 } from "react-router-dom";
+import {usePageTracking} from '../functions/useTracking';
 
 export const MyPage = () => {
+	usePageTracking();
 	const Theme = createTheme({
 		palette: {
 			text: {

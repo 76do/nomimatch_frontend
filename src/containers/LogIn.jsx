@@ -13,9 +13,10 @@ import{
 } from "react-router-dom";
 import { useCookies } from 'react-cookie';
 import Fade from '@mui/material/Fade';
+import {usePageTracking} from '../functions/useTracking';
 
 export const LogIn = () => {
-
+	usePageTracking();
 	const Theme = createTheme({
 		palette: {
 			text: {

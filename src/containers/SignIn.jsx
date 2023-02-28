@@ -15,9 +15,11 @@ import{
 	useHistory,
 } from "react-router-dom";
 import { useCookies } from 'react-cookie';
+import {usePageTracking} from '../functions/useTracking';
 
 export const SignIn = () => {
-const Theme = createTheme({
+	usePageTracking();
+	const Theme = createTheme({
 		palette: {
 			text: {
 				primary: '#263238',
