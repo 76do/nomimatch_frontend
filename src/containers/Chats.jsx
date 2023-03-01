@@ -26,6 +26,7 @@ import ListItemAvatar from '@mui/material/ListItemAvatar';
 import Avatar from '@mui/material/Avatar';
 import Typography from '@mui/material/Typography';
 import ChatIcon from '@mui/icons-material/Chat';
+import Grid from '@mui/material/Grid';
 
 export const Chats = () => {
 	usePageTracking();
@@ -43,6 +44,36 @@ export const Chats = () => {
 		},
 	});
 
+	const ChatsTitle = styled('div')({
+		fontSize: 30,
+		"@media screen and (max-width:480px)":{
+			fontSize: 27,
+		},
+		fontFamily: 'HiraKakuProN-W6',
+		textAlign: 'center',
+		paddingTop: 20,
+		paddingBottom: 20,
+	});
+	
+	const ChatsWrapper = styled('div')({
+		margin: '0 auto',
+		width: '50%',
+		"@media screen and (max-width:480px)":{
+			width: '90%',
+		},
+		paddingTop: 10,
+		paddingBottom: 20,
+		paddingLeft:15,
+		paddingRight:15,
+		backgroundColor: '#FFFFFF',
+		borderRadius: 10,
+	});
+	
+	const ChatsTime = styled('div')({
+		fontSize: 8,
+		fontFamily: 'HiraKakuProN-W6',
+	});
+	
 	function renderRow(props) {
   	const { index, style } = props;
 
@@ -55,14 +86,23 @@ export const Chats = () => {
 						sx={{fontSize: 30, color: 'main.primary', pt: 1, pb: 1}}
 					/ >
 				</ListItemAvatar>
-				<ListItemText
-				  primary="たあさん"
-				  secondary={
-					<React.Fragment>
-					  {" 飲み会依頼 ........."}
-					</React.Fragment>
-				  }
-				/>
+				<Grid container>
+					<Grid item xs={10}>
+						<ListItemText
+						  primary="たあさん"
+						  secondary={
+							<React.Fragment>
+							  {"yusukeさん......"}
+							</React.Fragment>
+						  }
+						/>
+					</Grid>
+					<Grid item xs={2}>
+						<ChatsTime>
+						2023/2/23
+						</ChatsTime>
+					</Grid>
+				</Grid>
 			  </ListItem>
       		</ListItemButton>
     	</ListItem>
@@ -72,15 +112,20 @@ export const Chats = () => {
 		<Fragment>
 			<ThemeProvider theme={Theme}>
 			<Container maxWidth='lg'>
+				<ChatsTitle>
+				メッセージ
+				</ChatsTitle>
+				<ChatsWrapper>
 				<FixedSizeList
-   				height={400}
-   				width={360}
-   				itemSize={80}
+   				height={480}
+   				width={'100%'}
+   				itemSize={88}
    				itemCount={100}
    				overscanCount={5}
    				>
    				{renderRow}
       			</FixedSizeList>
+				</ChatsWrapper>
 			</Container>
 			</ThemeProvider>
 		</Fragment>
