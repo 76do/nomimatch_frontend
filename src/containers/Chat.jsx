@@ -1,4 +1,4 @@
-import React, {Fragment, useState, useContext, useLayoutEffect} from 'react';
+import React, {Fragment, useState, useContext, useEffect} from 'react';
 import {styled, ThemeProvider, createTheme} from '@mui/material/styles';
 import '../assets/styles/style.css'
 import {Message} from './Message'
@@ -29,6 +29,8 @@ import Avatar from '@mui/material/Avatar';
 import Typography from '@mui/material/Typography';
 import ChatIcon from '@mui/icons-material/Chat';
 import Grid from '@mui/material/Grid';
+import Button from '@mui/material/Button';
+
 
 export const Chat = () => {
 	usePageTracking();
@@ -40,9 +42,6 @@ export const Chat = () => {
 			main: {
 				primary: '#ffa500'
 			},	
-			primary: {
-				main: '#ffa500'
-			}
 		},
 	});
 	
@@ -52,21 +51,31 @@ export const Chat = () => {
 		width: '50%',
 		"@media screen and (max-width:480px)":{
 			width: '90%',
+			height: 430,
+			paddingBottom: 30,
 		},
 		paddingTop: 10,
-		paddingBottom: 20,
+		paddingBottom: 70,
 		paddingLeft:15,
 		paddingRight:15,
 		backgroundColor: '#FFFFFF',
 		borderRadius: 10,
 	});
 	
-	const MyMessage = styled(ListItem)({
-	});
-
-	const OpponentMessage = styled(ListItem)({
-	});
-
+	const ChatTitle = styled('div')(({ theme }) => ({
+		fontSize: 30,
+		paddingTop: 20,
+		paddingBottom: 20,
+		"@media screen and (max-width:480px)":{
+			fontSize: 27,
+			paddingTop: 10,
+			paddingBottom: 10,
+		},
+		color: theme.palette.main.primary,
+		fontFamily: 'HiraKakuProN-W6',
+		textAlign: 'center',
+	}));
+	
 	const ChatsTime = styled('div')({
 		fontSize: 8,
 		fontFamily: 'HiraKakuProN-W6',
@@ -74,16 +83,55 @@ export const Chat = () => {
 
 	const MessageList = styled(List)({
 		height: 400,
+		marginBottom: 10,
+		"@media screen and (max-width:480px)":{
+			height: 300,
+		},
+		overflow: "auto",
 	});
+
+	const ButtonWrapper = styled('div')({
+		display: 'flex',
+		flexDirection: 'row-reverse',
+	});
+
+	const SendButton = styled(Button)({
+		height: 20,
+		width:'10%',
+	});
+
+	useEffect(() => {
+        const scrollArea = document.getElementById('scroll-area');
+        if (scrollArea) {
+            scrollArea.scrollTop = scrollArea.scrollHeight;
+        }
+    },[]);
 	
 	return(
 		<Fragment>
 			<ThemeProvider theme={Theme}>
 			<Container maxWidth='lg'>
+				<ChatTitle>
+				やまーだ	
+				</ChatTitle>
 				<ChatWrapper>
-					<MessageList>
+					<MessageList id={"scroll-area"}>
 						<Message/>
 					</MessageList>
+					<TextField
+          			id="outlined-multiline-static"
+					fullWidth
+          			multiline
+					label="メッセージを入力"
+          			rows={3}
+					sx={{mb:1}}
+        			/>
+					<ButtonWrapper>
+					<SendButton 
+					color='inherit'
+					sx={{ bgcolor: 'main.primary' }}
+					variant="contained">送信</SendButton>
+					</ButtonWrapper>
 				</ChatWrapper>
 			</Container>
 			</ThemeProvider>

@@ -66,8 +66,49 @@ export const Message = () => {
 	const messageClasses = isMe ? "p-chat__bubble_me" : "p-chat__bubble_opponent";
 	
 	return(
+		<>
 		<ListItem className={classes}>
 			<div className={messageClasses}>hogehoooooooooiooooooooooooooooooooo</div>
 		</ListItem>
+		<ListItem className={classes}>
+			<div className={messageClasses}>hogehoooooooooiooooooooooooooooooooo</div>
+		</ListItem>
+		<ListItem className={classes}>
+			<div className={messageClasses}>hogehoooooooooiooooooooooooooooooooo</div>
+		</ListItem>
+		<ListItem className={classes}>
+			<div className={messageClasses}>hogehoooooooooiooooooooooooooooooooo</div>
+		</ListItem>
+		<ListItem className={classes}>
+			<div className={messageClasses}>hogehoooooooooiooooooooooooooooooooo</div>
+		</ListItem>
+		<ListItem className={classes}>
+			<div className={messageClasses}>hogehoooooooooiooooooooooooooooooooo</div>
+		</ListItem>
+		<ListItem className={classes}>
+			<div className={messageClasses}>hogehoooooooooiooooooooooooooooooooo</div>
+		</ListItem>
+		<ListItem className={classes}>
+			<div className={messageClasses}>hogehoooooooooiooooooooooooooooooooo</div>
+		</ListItem>
+		<ListItem className={classes}>
+			<div className={messageClasses}>hogehoooooooooiooooooooooooooooooooo</div>
+		</ListItem>
+		<ListItem className={classes}>
+			<div className={messageClasses}>hogehoooooooooiooooooooooooooooooooo</div>
+		</ListItem>
+		<ListItem className={classes}>
+			<div className={messageClasses}>hogehoooooooooiooooooooooooooooooooo</div>
+		</ListItem>
+		<ListItem className={classes}>
+			<div className={messageClasses}>hogehoooooooooiooooooooooooooooooooo</div>
+		</ListItem>
+		<ListItem className={classes}>
+			<div className={messageClasses}>hogehoooooooooiooooooooooooooooooooo</div>
+		</ListItem>
+		<ListItem className={classes}>
+			<div className={messageClasses}>hogehoooooooooiooooooooooooooooooooo</div>
+		</ListItem>
+		</>
 	)
 }
