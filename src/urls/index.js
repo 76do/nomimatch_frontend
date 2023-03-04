@@ -8,3 +8,4 @@ export const receiverName = (userId) =>
 	`${DEFAULT_API_LOCALHOST}/users/${userId}/name`
 export const requests = `${DEFAULT_API_LOCALHOST}/user/requests`
 export const currentUser = `${DEFAULT_API_LOCALHOST}/current_user`
+export const chats = `${DEFAULT_API_LOCALHOST}/chats`
