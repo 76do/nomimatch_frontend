@@ -1,4 +1,4 @@
-import React, {Fragment, useState, useContext, useEffect} from 'react';
+import React, {Fragment, useState, useContext, useEffect, useMemo} from 'react';
 import {styled, ThemeProvider, createTheme} from '@mui/material/styles';
 import '../assets/styles/style.css'
 import {Message} from './Message'
@@ -30,9 +30,10 @@ import Typography from '@mui/material/Typography';
 import ChatIcon from '@mui/icons-material/Chat';
 import Grid from '@mui/material/Grid';
 import Button from '@mui/material/Button';
+import ActionCable from 'actioncable';
 
 
-export const Chat = () => {
+export const Chat = (props) => {
 	usePageTracking();
 	const Theme = createTheme({
 		palette: {
@@ -100,6 +101,13 @@ export const Chat = () => {
 		width:'10%',
 	});
 
+	const [receivedMessage, setReceivedMessage] = useState();
+	const [text, setText] = useState('');
+	const [input, setInput] = useState('');
+	const [subscription, setSubscription] = useState();
+	const cookies  = useCookies(['accessToken'])[0];
+	const cable = useMemo(() => ActionCable.createConsumer(`ws://localhost:3000/cable?token=${cookies.accessToken}`),[]);
+
 	useEffect(() => {
         const scrollArea = document.getElementById('scroll-area');
         if (scrollArea) {
@@ -107,6 +115,27 @@ export const Chat = () => {
         }
     },[]);
 	
+	useEffect(() => {
+		console.log(props)
+		const sub = cable.subscriptions.create({ channel: 'ChatChannel', room_id: props.room_id}, {
+			received: (msg) => console.log(msg) 
+		});
+		setSubscription(sub);
+	},[cable]);
+
+	useEffect(()=>{
+		console.log(receivedMessage)
+	},[receivedMessage])
+
+	const handleSend = () => {
+		subscription?.perform('chat', {body: input})
+		setInput('');
+	};
+
+	const onChangeInput = (e) => {
+		setInput(e.currentTarget.value);
+	};
+
 	return(
 		<Fragment>
 			<ThemeProvider theme={Theme}>
@@ -125,11 +154,15 @@ export const Chat = () => {
 					label="メッセージを入力"
           			rows={3}
 					sx={{mb:1}}
+					onChange={onChangeInput}
+					value={input}
         			/>
 					<ButtonWrapper>
 					<SendButton 
 					color='inherit'
 					sx={{ bgcolor: 'main.primary' }}
+					onClick={handleSend}
+					disabled={input === ''}
 					variant="contained">送信</SendButton>
 					</ButtonWrapper>
 				</ChatWrapper>

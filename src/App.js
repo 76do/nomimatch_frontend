@@ -72,7 +72,9 @@ function App() {
 	  							<Chats/>
 	  						</Route>
 	  						<Route exact path="/chat">
-	  							<Chat/>
+	  							<Chat
+								room_id={1}	
+								/>
 	  						</Route>
 	  						<Route path="/notready">
 	  							<NotReady/>
