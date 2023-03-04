@@ -1,10 +1,11 @@
-import React, {Fragment, useState, useContext, useLayoutEffect} from 'react';
+import React, {Fragment, useState, useContext, useEffect, useLayoutEffect} from 'react';
 import {styled, ThemeProvider, createTheme} from '@mui/material/styles';
 import Container from '@mui/material/Container';
 import TextField from '@mui/material/TextField';
 import Stack from '@mui/material/Stack';
 import { getUserRequests } from '../apis/GetRequests';
 import { getCurrentUser } from '../apis/GetCurrentUserInfo';
+import { getChats } from '../apis/GetChats';
 import Alert from '@mui/material/Alert';
 import { UserInfoContext } from '../providers/UserInfoProvider';
 import ListItemButton from '@mui/material/ListItemButton';
@@ -27,6 +28,9 @@ import Avatar from '@mui/material/Avatar';
 import Typography from '@mui/material/Typography';
 import ChatIcon from '@mui/icons-material/Chat';
 import Grid from '@mui/material/Grid';
+import{
+	useHistory,
+} from "react-router-dom";
 
 export const Chats = () => {
 	usePageTracking();
@@ -73,41 +77,76 @@ export const Chats = () => {
 		fontSize: 8,
 		fontFamily: 'HiraKakuProN-W6',
 	});
+
+	const initialState = {
+		isChatsEmpty: false,
+		hasChats: false,
+	}
+	const cookies  = useCookies(['accessToken'])[0];
+	const [state, setState] = useState(initialState);
+	const [chatsInfo, setChatsInfo] = useState([]);
+	const initialFetchState = {
+		fetching: true,
+		fetched: false,
+	}
+	const [fetchState, setFetchState] = useState(initialFetchState);
+	const history = useHistory();
 	
 	function renderRow(props) {
-  	const { index, style } = props;
+		const { index, style } = props;
+		const chat_message_length = chatsInfo[String(index)].chat_message.length
+		const send_time = chatsInfo[String(index)].chat_message[String(chat_message_length - 1)].created_at.substr(0, 10).split('-').join('/')
 
-  	return (
-    	<ListItem style={style} key={index} component="div" disablePadding >
-      		<ListItemButton>
-			  <ListItem alignItems="flex-start">
-				<ListItemAvatar>
-					<ChatIcon
-						sx={{fontSize: 30, color: 'main.primary', pt: 1, pb: 1}}
-					/ >
-				</ListItemAvatar>
-				<Grid container>
-					<Grid item xs={10}>
-						<ListItemText
-						  primary="たあさん"
-						  secondary={
-							<React.Fragment>
-							  {"yusukeさん......"}
-							</React.Fragment>
-						  }
+		return (
+			<ListItem style={style} index={index} component="div" disablePadding >
+				<ListItemButton>
+				  <ListItem alignItems="flex-start">
+					<ListItemAvatar>
+						<ChatIcon
+							sx={{fontSize: 30, color: 'main.primary', pt: 1, pb: 1}}
 						/>
+					</ListItemAvatar>
+					<Grid container>
+						<Grid item xs={10}>
+							<ListItemText
+							  primary={chatsInfo[String(index)].opponent['0'].name}
+							  secondary={
+								<React.Fragment>
+								{chatsInfo[String(index)].chat_message[String(chat_message_length - 1)].message.substr(0, 10)}
+								</React.Fragment>
+							  }
+						  	  onClick={()=>{
+								  history.push('/chat')
+							  }}
+							/>
+						</Grid>
+						<Grid item xs={2}>
+							<ChatsTime>
+							{send_time}
+							</ChatsTime>
+						</Grid>
 					</Grid>
-					<Grid item xs={2}>
-						<ChatsTime>
-						2023/2/23
-						</ChatsTime>
-					</Grid>
-				</Grid>
-			  </ListItem>
-      		</ListItemButton>
-    	</ListItem>
-  	);
+				  </ListItem>
+				</ListItemButton>
+			</ListItem>
+		);
 	}
+
+
+	useLayoutEffect(() => {
+		getChats(cookies.accessToken)
+		.then((data) => {
+			setChatsInfo(data)
+			if(data.length !== 0){
+				setState({...state, hasChats: true});
+			}else{
+				setState({...state, isChatsEmpty: true});
+			}
+			setFetchState({fetching: false, fetched: true});
+		}).catch((e) => {
+		})
+	},[])
+
 	return(
 		<Fragment>
 			<ThemeProvider theme={Theme}>
@@ -116,15 +155,29 @@ export const Chats = () => {
 				メッセージ
 				</ChatsTitle>
 				<ChatsWrapper>
-				<FixedSizeList
-   				height={480}
-   				width={'100%'}
-   				itemSize={88}
-   				itemCount={100}
-   				overscanCount={5}
-   				>
-   				{renderRow}
-      			</FixedSizeList>
+				{
+					fetchState.fetching &&
+					<CircularProgress/>
+				}
+				{
+					state.isChatsEmpty && fetchState.fetched &&
+					<div>
+					飲み会依頼はまだ届いていません！<br/>
+					届くまでもう少々お待ちください。
+					</div>
+				}
+				{
+					state.hasChats && fetchState.fetched &&
+					<FixedSizeList
+					height={480}
+					width={'100%'}
+					itemSize={88}
+					itemCount={chatsInfo.length}
+					overscanCount={5}
+					>
+					{renderRow}
+					</FixedSizeList>
+				}
 				</ChatsWrapper>
 			</Container>
 			</ThemeProvider>
