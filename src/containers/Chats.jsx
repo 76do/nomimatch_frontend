@@ -112,7 +112,7 @@ export const Chats = () => {
 							  primary={chatsInfo[String(index)].opponent['0'].name}
 							  secondary={
 								<React.Fragment>
-								{chatsInfo[String(index)].chat_message[String(chat_message_length - 1)].message.substr(0, 10)}
+								{chatsInfo[String(index)].chat_message[String(chat_message_length - 1)].message.substr(0, 5) + '...'}
 								</React.Fragment>
 							  }
 						  	  onClick={()=>{
