@@ -28,7 +28,7 @@ import Typography from '@mui/material/Typography';
 import ChatIcon from '@mui/icons-material/Chat';
 import Grid from '@mui/material/Grid';
 
-export const Message = (props) => {
+export const OpponentMessage = (props) => {
 	const Theme = createTheme({
 		palette: {
 			text: {
@@ -63,12 +63,12 @@ export const Message = (props) => {
 	const MessageListItem = styled(ListItem)({
 		display: 'flex',
 		flexDirection: 'row',
-		justifyContent: 'flex-end',
+		justifyContent: 'flex-start',
 		paddingRight: '0 !important',
 	});
 
 	const Value = styled('div')({
-		background: '#41B6E6',
+		background: 'orange',
 		borderRadius: 4,
 		color: '#fff',
 		fontSize: 14,
@@ -79,6 +79,7 @@ export const Message = (props) => {
 		width: 'auto',
 		overflowWrap: 'break-word',
 	});
+
 	
 	const classes = props.isMe ? "p-chat__reverse" : "p-chat__row";
 	const messageClasses = props.isMe ? "p-chat__bubble_me" : "p-chat__bubble_opponent";

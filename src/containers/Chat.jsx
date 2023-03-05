@@ -1,6 +1,7 @@
 import React, {Fragment, useState, useContext, useEffect, useMemo} from 'react';
 import {styled, ThemeProvider, createTheme} from '@mui/material/styles';
 import '../assets/styles/style.css'
+import {OpponentMessage} from './OpponentMessage'
 import {Message} from './Message'
 import Container from '@mui/material/Container';
 import TextField from '@mui/material/TextField';
@@ -101,12 +102,14 @@ export const Chat = (props) => {
 		width:'10%',
 	});
 
-	const [receivedMessage, setReceivedMessage] = useState();
-	const [text, setText] = useState('');
-	const [input, setInput] = useState('');
+	const [receivedMessage, setReceivedMessage] = useState('');
+	const {userInfo} = useContext(UserInfoContext);
 	const [subscription, setSubscription] = useState();
 	const cookies  = useCookies(['accessToken'])[0];
 	const location = useLocation();
+	const [messages, setMessages] = useState(location.state.messageInfo);
+	const [roomId, setRoomId] = useState(location.state.roomId);
+	const [message, setMessage] = useState('');
 	const cable = useMemo(() => ActionCable.createConsumer(`ws://localhost:3000/cable?token=${cookies.accessToken}`),[]);
 
 	useEffect(() => {
@@ -114,61 +117,74 @@ export const Chat = (props) => {
         if (scrollArea) {
             scrollArea.scrollTop = scrollArea.scrollHeight;
         }
-    },[]);
+    });
 	
 	useEffect(() => {
-		const sub = cable.subscriptions.create({ channel: 'ChatChannel', room_id: props.room_id}, {
-			received: (msg) => console.log(msg) 
+		const sub = cable.subscriptions.create({ channel: 'ChatChannel', room_id: roomId}, {
+			received: (msg) => {
+				setReceivedMessage(msg) 
+			}
 		});
 		setSubscription(sub);
 	},[cable]);
 
 	useEffect(()=>{
-		console.log(receivedMessage)
+		if(receivedMessage !== ''){
+			const newMessage = {
+				user_id: receivedMessage.user.id,
+				message: receivedMessage.message,
+			}
+			setMessages([...messages, newMessage])
+		}
 	},[receivedMessage])
 
-	const handleSend = () => {
-		subscription?.perform('chat', {body: input})
-		setInput('');
-	};
+	let value = ''
 
 	const onChangeInput = (e) => {
-		setInput(e.currentTarget.value);
+		value = e.target.value
+	};
+
+	const handleSend = () => {
+		subscription.perform('chat', { body: value });
+	};
+
+	const branchMessages = (message, index) => {
+		if(message.user_id === 7){
+			return <Message message={message.message} key={index}/>
+		}else{
+			return <OpponentMessage message={message.message} key={index}/>
+		}
 	};
 
 	return(
 		<Fragment>
 			<ThemeProvider theme={Theme}>
 			<Container maxWidth='lg'>
-		{
-			console.log(location.state.roomId)
-		}
-		{
-			console.log(location.state.messageInfo)
-		}
 				<ChatTitle>
-				やまーだ	
+				{location.state.opponentName}
 				</ChatTitle>
 				<ChatWrapper>
 					<MessageList id={"scroll-area"}>
-						<Message/>
+					{
+						messages.map((message, index) => {
+							return	branchMessages(message, index)
+						})
+					}
 					</MessageList>
 					<TextField
-          			id="outlined-multiline-static"
+					id="inputField"
 					fullWidth
-          			multiline
+					multiline
 					label="メッセージを入力"
-          			rows={3}
+					rows={3}
 					sx={{mb:1}}
 					onChange={onChangeInput}
-					value={input}
-        			/>
+					/>
 					<ButtonWrapper>
 					<SendButton 
 					color='inherit'
 					sx={{ bgcolor: 'main.primary' }}
 					onClick={handleSend}
-					disabled={input === ''}
 					variant="contained">送信</SendButton>
 					</ButtonWrapper>
 				</ChatWrapper>

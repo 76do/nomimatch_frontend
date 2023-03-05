@@ -116,7 +116,10 @@ export const Chats = () => {
 								</React.Fragment>
 							  }
 						  	  onClick={()=>{
-								  history.push('/chat', {messageInfo: chatsInfo[String(index)].chat_message, roomId: chatsInfo[String(index)].id})
+								  history.push('/chat', {opponentName: chatsInfo[String(index)].opponent['0'].name, 
+									  messageInfo: chatsInfo[String(index)].chat_message,
+									  roomId: chatsInfo[String(index)].id,
+								 })
 							  }}
 							/>
 						</Grid>
