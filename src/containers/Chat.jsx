@@ -106,6 +106,7 @@ export const Chat = (props) => {
 	const [input, setInput] = useState('');
 	const [subscription, setSubscription] = useState();
 	const cookies  = useCookies(['accessToken'])[0];
+	const location = useLocation();
 	const cable = useMemo(() => ActionCable.createConsumer(`ws://localhost:3000/cable?token=${cookies.accessToken}`),[]);
 
 	useEffect(() => {
@@ -116,7 +117,6 @@ export const Chat = (props) => {
     },[]);
 	
 	useEffect(() => {
-		console.log(props)
 		const sub = cable.subscriptions.create({ channel: 'ChatChannel', room_id: props.room_id}, {
 			received: (msg) => console.log(msg) 
 		});
@@ -140,6 +140,12 @@ export const Chat = (props) => {
 		<Fragment>
 			<ThemeProvider theme={Theme}>
 			<Container maxWidth='lg'>
+		{
+			console.log(location.state.roomId)
+		}
+		{
+			console.log(location.state.messageInfo)
+		}
 				<ChatTitle>
 				やまーだ	
 				</ChatTitle>
