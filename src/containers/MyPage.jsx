@@ -41,12 +41,15 @@ export const MyPage = () => {
 	const MessageWrapper = styled('div')({
 		width: '100%',
 		height: 90,
+		"@media screen and (max-width:480px)":{
+			height: 50,
+		},
 	});
 
 	const MyPageTitle = styled('div')({
 		fontSize: 30,
 		"@media screen and (max-width:480px)":{
-			fontSize: 27,
+			fontSize: 22,
 		},
 		fontFamily: 'HiraKakuProN-W6',
 		textAlign: 'center',
