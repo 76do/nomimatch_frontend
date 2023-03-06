@@ -6,7 +6,9 @@ export const UserInfoProvider = props => {
 	const { children } = props;
 
 	const initialState = {
+		id: 0,
 		name: "",
+		random_id: "",
 	}
 	const [userInfo, setUserInfo] = useState(initialState);
 

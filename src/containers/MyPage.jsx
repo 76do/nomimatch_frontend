@@ -20,6 +20,7 @@ import{
 	useLocation
 } from "react-router-dom";
 import {usePageTracking} from '../functions/useTracking';
+import Drawer from '@mui/material/Drawer';
 
 export const MyPage = () => {
 	usePageTracking();
@@ -196,7 +197,7 @@ export const MyPage = () => {
 		window.scrollTo({ top: 0, behavior: "smooth"})
 		getCurrentUser(cookies.accessToken)
 		.then((data) => {
-			setUserInfo({name: data['data']['attributes']['name'],random_id: data['data']['attributes']['random_id'] })
+			setUserInfo({id: data['data'].id, name: data['data']['attributes']['name'], random_id: data['data']['attributes']['random_id'] })
 		}).catch((e) => {
 		})
 		getUserRequests(cookies.accessToken)

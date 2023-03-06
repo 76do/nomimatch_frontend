@@ -14,6 +14,8 @@ import {Header} from './containers/Header.jsx';
 import {LoginHeader} from './containers/LoginHeader.jsx';
 import {Footer} from './containers/Footer.jsx';
 import {NotReady} from './containers/NotReady.jsx';
+import {Chats} from './containers/Chats.jsx';
+import {Chat} from './containers/Chat.jsx';
 import {styled, ThemeProvider, createTheme} from '@mui/system';
 import {useCookies} from 'react-cookie';
 
@@ -65,6 +67,14 @@ function App() {
 	  						/>
 	  						<Route exact path="/mypage">
 	  							<MyPage loginNotice={false}/>
+	  						</Route>
+	  						<Route exact path="/chats">
+	  							<Chats/>
+	  						</Route>
+	  						<Route exact path="/chat">
+	  							<Chat
+								room_id={1}	
+								/>
 	  						</Route>
 	  						<Route path="/notready">
 	  							<NotReady/>

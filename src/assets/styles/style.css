@@ -1,0 +1,40 @@
+.p-chat__row {
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-start;
+    padding-right: 0 !important;
+}
+
+.p-chat__reverse {
+    display: flex;
+    flex-direction: row-reverse;
+    justify-content: flex-end;
+    padding-right: 0 !important;
+}
+
+.p-chat__bubble_me {
+	background: #41B6E6;
+	border-radius: 4px;
+   	color: #fff;
+   	font-size: 14px;
+   	font-weight: 500;
+   	padding: .5rem;
+   	margin-right: 1rem;
+   	max-width: 80%;
+   	width: auto;
+	overflow-wrap: break-word;
+}
+
+.p-chat__bubble_opponent {
+	background: orange;
+	border-radius: 4px;
+   	color: #fff;
+   	font-size: 14px;
+   	font-weight: 500;
+   	padding: .5rem;
+   	margin-right: 1rem;
+   	max-width: 80%;
+   	width: auto;
+	overflow-wrap: break-word;
+}
+
