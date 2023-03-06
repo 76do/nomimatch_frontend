@@ -110,6 +110,7 @@ export const Chat = (props) => {
 	const [messages, setMessages] = useState(location.state.messageInfo);
 	const [roomId, setRoomId] = useState(location.state.roomId);
 	const [message, setMessage] = useState('');
+	const [userId, setUserId] = useState(Number(userInfo.id))
 	const cable = useMemo(() => ActionCable.createConsumer(`ws://localhost:3000/cable?token=${cookies.accessToken}`),[]);
 
 	useEffect(() => {
@@ -149,7 +150,7 @@ export const Chat = (props) => {
 	};
 
 	const branchMessages = (message, index) => {
-		if(message.user_id === 7){
+		if(message.user_id === userId){
 			return <Message message={message.message} key={index}/>
 		}else{
 			return <OpponentMessage message={message.message} key={index}/>

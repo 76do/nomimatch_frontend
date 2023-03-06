@@ -70,7 +70,7 @@ export const OpponentMessage = (props) => {
 	const Value = styled('div')({
 		background: 'orange',
 		borderRadius: 4,
-		color: '#fff',
+		color: 'black',
 		fontSize: 14,
 		fontWeight: 500,
 		padding: '.5rem',

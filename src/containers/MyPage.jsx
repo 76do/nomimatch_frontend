@@ -20,6 +20,7 @@ import{
 	useLocation
 } from "react-router-dom";
 import {usePageTracking} from '../functions/useTracking';
+import Drawer from '@mui/material/Drawer';
 
 export const MyPage = () => {
 	usePageTracking();

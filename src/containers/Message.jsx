@@ -70,7 +70,7 @@ export const Message = (props) => {
 	const Value = styled('div')({
 		background: '#41B6E6',
 		borderRadius: 4,
-		color: '#fff',
+		color: '#FFF',
 		fontSize: 14,
 		fontWeight: 500,
 		padding: '.5rem',

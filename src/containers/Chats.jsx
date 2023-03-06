@@ -157,11 +157,11 @@ export const Chats = () => {
 				<ChatsTitle>
 				メッセージ
 				</ChatsTitle>
-				<ChatsWrapper>
 				{
 					fetchState.fetching &&
 					<CircularProgress/>
 				}
+				<ChatsWrapper>
 				{
 					state.isChatsEmpty && fetchState.fetched &&
 					<div>

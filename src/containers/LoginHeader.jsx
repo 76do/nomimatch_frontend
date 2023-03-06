@@ -12,6 +12,7 @@ import{
 } from "react-router-dom";
 import { LogOut } from '../apis/LogOut';
 import { useCookies } from 'react-cookie';
+import SettingsOutlinedIcon from '@mui/icons-material/SettingsOutlined';
 
 export const LoginHeader = () => {
 
@@ -24,8 +25,9 @@ export const LoginHeader = () => {
 				primary: '#263238',
 			},
 			main: {
-				primary: '#ffa500'
-			},	
+				primary: '#ffa500',
+				secondary: '#ffd700',
+			},
 		},
 	});
 
@@ -89,11 +91,32 @@ export const LoginHeader = () => {
 								history.push("/mypage", {loginNotice: false});
 							}}
 							>マイページ</HeaderButton>
+        					<HeaderButton 
+							sx={{ mr: 2, bgcolor: 'main.secondary'}}
+							variant='outlined'
+							color='inherit'
+							onClick={()=>{
+								history.push("/chats");
+							}}
+							>チャット一覧</HeaderButton>
           					<HeaderButton
 							variant='outlined'
 							color='inherit'
 							onClick={logout}
 							>ログアウト</HeaderButton>
+							<IconButton
+            				size="large"
+            				edge="start"
+            				color="inherit"
+            				aria-label="menu"
+            				sx={{ ml: 2 }}
+							onClick={()=>{
+								history.push("/notready");
+							}}
+          					>
+	  							<SettingsOutlinedIcon 
+								sx={{fontSize: 40, color: 'black'}}/>
+          					</IconButton>
         				</Toolbar>
 	  				</Container>
       			</NomimatchAppBar>
