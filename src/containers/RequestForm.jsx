@@ -21,7 +21,9 @@ import InputLabel from '@mui/material/InputLabel';
 import FormControl from '@mui/material/FormControl';
 import Slider from '@mui/material/Slider';
 import { RequestDialog } from './RequestDialog';
+import { RegisterRecommendDialog } from './RegisterRecommendDialog';
 import {usePageTracking} from '../functions/useTracking';
+import { useCookies } from 'react-cookie';
 
 export const RequestForm = ({
 	match
@@ -128,6 +130,7 @@ export const RequestForm = ({
 	const initialState = {
 		isSent: false,
 		isOpenDialog: false,
+		isOpenRecommendDialog: true,
 		condition: false,
 		errorMessages: [],
 	};
@@ -196,6 +199,8 @@ export const RequestForm = ({
 		})
 	};
 
+	const cookies  = useCookies(['accessToken'])[0];
+
 	useEffect(()=> {
 		window.scrollTo({ top: 0, behavior: "smooth"})
 	}, [errors])
@@ -204,6 +209,17 @@ export const RequestForm = ({
 		<Fragment>
 			<ThemeProvider theme={Theme}>
 			<Container maxWidth='lg'>
+				{
+					!cookies.accessToken &&
+					<RegisterRecommendDialog
+					receiverName = {request.receiverName}
+					open={state.isOpenRecommendDialog}
+					onClose={() => setState({
+						...state,
+						isOpenRecommendDialog: false,
+					})}
+					/>
+				}
 				{
 					state.errorMessages.map((message, index)=>{
 						window.scrollTo({ top: 0, behavior: "smooth"})
