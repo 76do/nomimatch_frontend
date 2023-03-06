@@ -4,7 +4,7 @@ import{
 	Switch,
 	Route,
 } from "react-router-dom";
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import {Top} from './containers/Top.jsx';
 import {SignIn} from './containers/SignIn.jsx';
 import {LogIn} from './containers/LogIn.jsx';
@@ -12,6 +12,7 @@ import {RequestForm} from './containers/RequestForm.jsx';
 import {MyPage} from './containers/MyPage.jsx';
 import {Header} from './containers/Header.jsx';
 import {LoginHeader} from './containers/LoginHeader.jsx';
+import {LoginHeaderSP} from './containers/LoginHeaderSP.jsx';
 import {Footer} from './containers/Footer.jsx';
 import {NotReady} from './containers/NotReady.jsx';
 import {Chats} from './containers/Chats.jsx';
@@ -34,11 +35,29 @@ function App() {
 	}));
 
 	const cookies = useCookies(['accessToken'])[0];
+	const [dimension, setDimension] = useState({width: window.innerWidth})
+
+	useEffect(() => {
+		setDimension({width: window.innerWidth})
+	},[])
 
   	return (
 	  	<Router>
 			{
-				cookies.accessToken && 
+				console.log(cookies.accessToken)
+			}
+			{
+				console.log(dimension.width)
+			}
+			{
+				console.log(dimension.width <= 480)
+			}
+			{
+				cookies.accessToken && (dimension.width <= 480) &&
+				<LoginHeaderSP/>
+			}
+			{
+				cookies.accessToken && (dimension.width > 480) &&
 				<LoginHeader/>
 			}
 			{
