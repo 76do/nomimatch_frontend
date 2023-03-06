@@ -121,6 +121,7 @@ export const Chat = (props) => {
     });
 	
 	useEffect(() => {
+		window.scroll({top: document.body.scrollHeight, behavior: 'smooth'});
 		const sub = cable.subscriptions.create({ channel: 'ChatChannel', room_id: roomId}, {
 			received: (msg) => {
 				setReceivedMessage(msg) 

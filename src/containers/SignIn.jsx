@@ -33,6 +33,9 @@ export const SignIn = () => {
 	const MessageWrapper = styled('div')({
 		width: '100%',
 		height: 90,
+		"@media screen and (max-width:480px)":{
+			height: 50,
+		},
 	});
 
 	const SignInTitle = styled('div')({

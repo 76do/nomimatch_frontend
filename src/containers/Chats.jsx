@@ -137,6 +137,7 @@ export const Chats = () => {
 
 
 	useLayoutEffect(() => {
+		window.scrollTo({ top: 0, behavior: "smooth"})
 		getChats(cookies.accessToken)
 		.then((data) => {
 			setChatsInfo(data)

@@ -16,7 +16,7 @@ const Theme = createTheme({
 });
 
 const FooterWrapper = styled('div')(({ theme }) => ({
-	height: 150,
+	height: 100,
 	display: 'flex',
 	justifyContent: 'flex-end',
 	alignItems: 'center',

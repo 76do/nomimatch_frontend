@@ -14,6 +14,7 @@ import {Header} from './containers/Header.jsx';
 import {LoginHeader} from './containers/LoginHeader.jsx';
 import {LoginHeaderSP} from './containers/LoginHeaderSP.jsx';
 import {Footer} from './containers/Footer.jsx';
+import {LoginFooterSP} from './containers/LoginFooterSP.jsx';
 import {NotReady} from './containers/NotReady.jsx';
 import {Chats} from './containers/Chats.jsx';
 import {Chat} from './containers/Chat.jsx';
@@ -30,7 +31,7 @@ function App() {
 	});
 	
 	const BaseComponent = styled('div')(({theme}) => ({
-		minHeight:'100vh',
+		minHeight:'80vh',
 		backgroundColor: theme.palette.primary.main,
 	}));
 
@@ -101,7 +102,14 @@ function App() {
 	  					</Switch>
 					</BaseComponent>
 				</ThemeProvider>
-			<Footer/>
+			{
+				cookies.accessToken && (dimension.width <= 480) &&
+				<LoginFooterSP/>
+			}
+			{
+				!(cookies.accessToken && (dimension.width <= 480)) &&
+				<Footer/>
+			}
 	  	</Router>
   );
 }
