@@ -48,12 +48,6 @@ function App() {
 				console.log(cookies.accessToken)
 			}
 			{
-				console.log(dimension.width)
-			}
-			{
-				console.log(dimension.width <= 480)
-			}
-			{
 				cookies.accessToken && (dimension.width <= 480) &&
 				<LoginHeaderSP/>
 			}

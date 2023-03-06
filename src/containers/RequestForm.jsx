@@ -212,7 +212,7 @@ export const RequestForm = ({
 				{
 					!cookies.accessToken &&
 					<RegisterRecommendDialog
-					receiverName = {request.receiverName}
+					receivername = {request.receiverName}
 					open={state.isOpenRecommendDialog}
 					onClose={() => setState({
 						...state,

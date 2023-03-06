@@ -10,6 +10,7 @@ import Alert from '@mui/material/Alert';
 import { HTTP_STATUS_CODE } from '../constants'
 import{
 	useHistory,
+	useLocation,
 } from "react-router-dom";
 import { useCookies } from 'react-cookie';
 import Fade from '@mui/material/Fade';
@@ -79,6 +80,7 @@ export const LogIn = () => {
 	const[state, setState] = useState(initialState);
 
 	const history = useHistory();
+	const location = useLocation();
 
 	const cookiesArray = useCookies(["accessToken"]);
 	const cookies = cookiesArray[0]
@@ -93,8 +95,12 @@ export const LogIn = () => {
 		.then((resData)=>{
 			let cookieDate = new Date()
 			cookieDate.setDate(cookieDate.getDate()+7);
-			setCookie("accessToken", resData.headers['accesstoken'], {expires: cookieDate, sameSite: 'none', secure: true})
-			history.push("/mypage",{loginNotice: true});
+			setCookie("accessToken", resData.headers['accesstoken'], {expires: cookieDate, sameSite: 'none', secure: true, path: '/'})
+			if(location.state === undefined){
+				history.push("/mypage",{loginNotice: true});
+			}else{
+				history.push(location.state.redirectUrl);
+			}
 		}).catch((e) => {
 			if(e.response.status === HTTP_STATUS_CODE.UNAUTHORIZED){
 				setState({
@@ -113,7 +119,7 @@ export const LogIn = () => {
 			<Container maxWidth='lg'>
 				<MessageWrapper>
 				{
-					cookies['accessToken'] !== undefined &&
+					cookies.accessToken !== undefined &&
 						<Fade in={true}><Alert severity="warning">既にログインしています。</Alert></Fade>
 				}
 				{

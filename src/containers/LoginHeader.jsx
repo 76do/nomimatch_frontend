@@ -56,7 +56,8 @@ export const LoginHeader = () => {
 		if(window.confirm('ログアウトしますか？')){
 		LogOut(cookies["accessToken"])
 		.then(() => {
-			removeCookie('accessToken')
+			console.log(cookies)
+			removeCookie('accessToken', {path: '/'})
 			history.push("/",{logoutNotice: true})
 		}).catch(
 		)}

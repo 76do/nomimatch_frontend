@@ -10,11 +10,11 @@ import { TIME, NUMBER_OF_PEOPLE, BUDGET } from '../constants'
 import { setAtmosphere } from '../functions/setAtmosphere';
 import{
 	useHistory,
+	useLocation
 } from "react-router-dom";
 
-
 export const RegisterRecommendDialog = ({
-	receiverName,
+	receivername,
 	open,
 	onClose,
 }) => {
@@ -123,19 +123,19 @@ export const RegisterRecommendDialog = ({
 		marginTop: 30,
 	});
 
+	const location = useLocation();
 	const history = useHistory();
 
 	return (
 		<ThemeProvider theme={Theme}>
 		<Dialog
 		open = {open}
-		receiverName = {receiverName}
 		onClose = {onClose}		
 		>
 		<DialogContent>
 			<DialogWrapper>
 			ログインした後に依頼を送信すると<br/>
-			後で<ReceiverName>やまーだ</ReceiverName>さんとチャットすることができます！
+			あとで<ReceiverName>{receivername}</ReceiverName>さんとチャットすることができます！
 			</DialogWrapper>
 			<ButtonWrapperTop>
 			<EmphasizedButton
@@ -143,7 +143,7 @@ export const RegisterRecommendDialog = ({
 			variant='outlined'
 			color='inherit'
 			onClick={()=>{
-				history.push("/", {logoutNotice: false});
+				history.push("/signin", {redirectUrl: location.pathname });
 			}}
 			>
 			新規登録
@@ -153,7 +153,7 @@ export const RegisterRecommendDialog = ({
 			variant='outlined'
 			color='inherit'
 			onClick={()=>{
-				history.push("/", {logoutNotice: false});
+				history.push("/login", {redirectUrl: location.pathname});
 			}}
 			>
 			ログイン
@@ -166,9 +166,9 @@ export const RegisterRecommendDialog = ({
 			<NormalButton
 			variant='outlined'
 			color='inherit'
-			onClick={()=>{
-				history.push("/", {logoutNotice: false});
-			}}
+			onClick={
+				onClose
+			}
 			>
 			チャット機能なしで飲み会依頼を送る！
 			</NormalButton>
