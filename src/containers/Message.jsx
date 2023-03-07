@@ -78,6 +78,7 @@ export const Message = (props) => {
 		maxWidth: '80%',
 		width: 'auto',
 		overflowWrap: 'break-word',
+		whiteSpace: 'pre-wrap',
 	});
 	
 	const classes = props.isMe ? "p-chat__reverse" : "p-chat__row";
@@ -85,6 +86,9 @@ export const Message = (props) => {
 	
 	return(
 		<>
+		{
+			console.log(props.message)
+		}
 		<MessageListItem>
 			<Value>{props.message}</Value>
 		</MessageListItem>

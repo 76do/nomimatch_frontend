@@ -153,7 +153,7 @@ export const Chat = (props) => {
 	},[receivedMessage])
 
 	useLayoutEffect(() => {
-		if(userInfo.id === ''){
+		if((cookies.accessToken) && (userInfo.id === '')){
 			getCurrentUser(cookies.accessToken)
 			.then((data) => {
 				setUserInfo({id: data['data'].id, name: data['data']['attributes']['name'], random_id: data['data']['attributes']['random_id'] })

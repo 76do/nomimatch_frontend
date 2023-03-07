@@ -114,6 +114,7 @@ export const Chats = () => {
 	function renderRow(props) {
 		const { index, style } = props;
 		const chat_message_length = chatsInfo[String(index)].chat_message.length
+		console.log(chatsInfo[String(index)])
 		const send_time = chatsInfo[String(index)].chat_message[String(chat_message_length - 1)].created_at.substr(0, 10).split('-').join('/')
 
 		return (
