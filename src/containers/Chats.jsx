@@ -78,6 +78,25 @@ export const Chats = () => {
 		fontFamily: 'HiraKakuProN-W6',
 	});
 
+	const NoChats = styled('div')(({ theme }) =>({
+		fontSize: 18,
+		paddingRight:'22%',
+		paddingLeft:'22%',
+		paddingTop: 25,
+		paddingBottom: 25,
+		"@media screen and (max-width:480px)":{
+			fontSize: 15,
+		},
+		fontFamily: 'HiraKakuProN-W6',
+		color: theme.palette.text.primary,
+	}));
+
+	const CircularWrapper = styled('div')({
+		paddingTop: 60,
+		display: 'flex',
+		justifyContent: 'center',
+	});
+
 	const initialState = {
 		isChatsEmpty: false,
 		hasChats: false,
@@ -155,34 +174,47 @@ export const Chats = () => {
 		<Fragment>
 			<ThemeProvider theme={Theme}>
 			<Container maxWidth='lg'>
-				<ChatsTitle>
-				メッセージ
-				</ChatsTitle>
 				{
-					fetchState.fetching &&
-					<CircularProgress/>
-				}
-				<ChatsWrapper>
-				{
-					state.isChatsEmpty && fetchState.fetched &&
-					<div>
-					飲み会依頼はまだ届いていません！<br/>
-					届くまでもう少々お待ちください。
-					</div>
+					cookies.accessToken === undefined &&
+						<Fade in={true}><Alert severity="error">ログインしてください！</Alert></Fade>
 				}
 				{
-					state.hasChats && fetchState.fetched &&
-					<FixedSizeList
-					height={480}
-					width={'100%'}
-					itemSize={88}
-					itemCount={chatsInfo.length}
-					overscanCount={5}
-					>
-					{renderRow}
-					</FixedSizeList>
+					cookies.accessToken &&
+					<>
+					<ChatsTitle>
+					メッセージ
+					</ChatsTitle>
+					{
+						fetchState.fetching &&
+						<CircularWrapper>
+							<CircularProgress size={50}/>
+						</CircularWrapper>
+					}
+					{
+						state.isChatsEmpty && fetchState.fetched &&
+					<ChatsWrapper>
+						<NoChats>
+						メッセージはまだ届いていません！<br/>
+						届くまでもう少々お待ちください。
+						</NoChats>
+					</ChatsWrapper>
+					}
+					{
+						state.hasChats && fetchState.fetched &&
+					<ChatsWrapper>
+						<FixedSizeList
+						height={480}
+						width={'100%'}
+						itemSize={88}
+						itemCount={chatsInfo.length}
+						overscanCount={5}
+						>
+						{renderRow}
+						</FixedSizeList>
+					</ChatsWrapper>
+					}
+					</>
 				}
-				</ChatsWrapper>
 			</Container>
 			</ThemeProvider>
 		</Fragment>

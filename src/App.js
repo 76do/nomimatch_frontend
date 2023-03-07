@@ -4,7 +4,7 @@ import{
 	Switch,
 	Route,
 } from "react-router-dom";
-import React, { useEffect, useState } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import {Top} from './containers/Top.jsx';
 import {SignIn} from './containers/SignIn.jsx';
 import {LogIn} from './containers/LogIn.jsx';
@@ -20,6 +20,8 @@ import {Chats} from './containers/Chats.jsx';
 import {Chat} from './containers/Chat.jsx';
 import {styled, ThemeProvider, createTheme} from '@mui/system';
 import {useCookies} from 'react-cookie';
+import { UserInfoContext } from './providers/UserInfoProvider';
+import { getCurrentUser } from './apis/GetCurrentUserInfo';
 
 function App() {
 	const Theme = createTheme({
@@ -44,15 +46,6 @@ function App() {
 
   	return (
 	  	<Router>
-			{
-				console.log(cookies.accessToken)
-			}
-			{
-				console.log(dimension.width)
-			}
-			{
-				console.log(dimension.width <= 480)
-			}
 			{
 				cookies.accessToken && (dimension.width <= 480) &&
 				<LoginHeaderSP/>

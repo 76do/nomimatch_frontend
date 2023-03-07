@@ -6,7 +6,7 @@ export const UserInfoProvider = props => {
 	const { children } = props;
 
 	const initialState = {
-		id: 0,
+		id: "",
 		name: "",
 		random_id: "",
 	}

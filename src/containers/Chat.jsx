@@ -1,4 +1,4 @@
-import React, {Fragment, useState, useContext, useEffect, useMemo} from 'react';
+import React, {Fragment, useLayoutEffect, useState, useContext, useEffect, useMemo} from 'react';
 import {styled, ThemeProvider, createTheme} from '@mui/material/styles';
 import '../assets/styles/style.css'
 import {OpponentMessage} from './OpponentMessage'
@@ -78,6 +78,12 @@ export const Chat = (props) => {
 		textAlign: 'center',
 	}));
 	
+	const CircularWrapper = styled('div')({
+		paddingTop: 60,
+		display: 'flex',
+		justifyContent: 'center',
+	});
+
 	const ChatsTime = styled('div')({
 		fontSize: 8,
 		fontFamily: 'HiraKakuProN-W6',
@@ -102,15 +108,21 @@ export const Chat = (props) => {
 		width:'10%',
 	});
 
+	const initialFetchState = {
+		fetching: true,
+		fetched: false 
+	};
+
 	const [receivedMessage, setReceivedMessage] = useState('');
-	const {userInfo} = useContext(UserInfoContext);
+	const {userInfo, setUserInfo} = useContext(UserInfoContext);
 	const [subscription, setSubscription] = useState();
 	const cookies  = useCookies(['accessToken'])[0];
 	const location = useLocation();
 	const [messages, setMessages] = useState(location.state.messageInfo);
 	const [roomId, setRoomId] = useState(location.state.roomId);
 	const [message, setMessage] = useState('');
-	const [userId, setUserId] = useState(Number(userInfo.id))
+	const [userId, setUserId] = useState(Number(userInfo.id));
+	const [fetchState, setFetchState] = useState(initialFetchState);
 	const cable = useMemo(() => ActionCable.createConsumer(`ws://localhost:3000/cable?token=${cookies.accessToken}`),[]);
 
 	useEffect(() => {
@@ -140,6 +152,19 @@ export const Chat = (props) => {
 		}
 	},[receivedMessage])
 
+	useLayoutEffect(() => {
+		if(userInfo.id === ''){
+			getCurrentUser(cookies.accessToken)
+			.then((data) => {
+				setUserInfo({id: data['data'].id, name: data['data']['attributes']['name'], random_id: data['data']['attributes']['random_id'] })
+				setFetchState({fetching: false, fetched: true})
+			}).catch((e) => {
+			})
+		}else{
+			setFetchState({fetching: false, fetched: true})
+		}
+	},[])
+
 	let value = ''
 
 	const onChangeInput = (e) => {
@@ -151,7 +176,7 @@ export const Chat = (props) => {
 	};
 
 	const branchMessages = (message, index) => {
-		if(message.user_id === userId){
+		if(message.user_id === Number(userInfo.id)){
 			return <Message message={message.message} key={index}/>
 		}else{
 			return <OpponentMessage message={message.message} key={index}/>
@@ -165,31 +190,41 @@ export const Chat = (props) => {
 				<ChatTitle>
 				{location.state.opponentName}
 				</ChatTitle>
-				<ChatWrapper>
-					<MessageList id={"scroll-area"}>
-					{
-						messages.map((message, index) => {
-							return	branchMessages(message, index)
-						})
-					}
-					</MessageList>
-					<TextField
-					id="inputField"
-					fullWidth
-					multiline
-					label="メッセージを入力"
-					rows={3}
-					sx={{mb:1}}
-					onChange={onChangeInput}
-					/>
-					<ButtonWrapper>
-					<SendButton 
-					color='inherit'
-					sx={{ bgcolor: 'main.primary' }}
-					onClick={handleSend}
-					variant="contained">送信</SendButton>
-					</ButtonWrapper>
-				</ChatWrapper>
+				{
+					fetchState.fetching &&
+						<CircularWrapper>
+							<CircularProgress 
+							size={50}/>
+						</CircularWrapper>
+				}
+				{
+					fetchState.fetched &&
+					<ChatWrapper>
+						<MessageList id={"scroll-area"}>
+						{
+							messages.map((message, index) => {
+								return	branchMessages(message, index)
+							})
+						}
+						</MessageList>
+						<TextField
+						id="inputField"
+						fullWidth
+						multiline
+						label="メッセージを入力"
+						rows={3}
+						sx={{mb:1}}
+						onChange={onChangeInput}
+						/>
+						<ButtonWrapper>
+						<SendButton 
+						color='inherit'
+						sx={{ bgcolor: 'main.primary' }}
+						onClick={handleSend}
+						variant="contained">送信</SendButton>
+						</ButtonWrapper>
+					</ChatWrapper>
+				}
 			</Container>
 			</ThemeProvider>
 		</Fragment>

@@ -13,6 +13,7 @@ import { HTTP_STATUS_CODE } from '../constants'
 import Fade from '@mui/material/Fade';
 import{
 	useHistory,
+	useLocation,
 } from "react-router-dom";
 import { useCookies } from 'react-cookie';
 import {usePageTracking} from '../functions/useTracking';
@@ -102,6 +103,7 @@ export const SignIn = () => {
 
 	const[state, setState] = useState(initialState);
 	const history = useHistory()
+	const location = useLocation()
 	const cookiesArray = useCookies(["accessToken"]);
 	const setCookie = cookiesArray[1]
 
@@ -120,8 +122,12 @@ export const SignIn = () => {
 			})
 			let cookieDate = new Date()
 			cookieDate.setDate(cookieDate.getDate()+7);
-			setCookie("accessToken", resData.headers['accesstoken'], {expires: cookieDate, sameSite: 'none', secure: true})
-			history.push("/mypage",{loginNotice: true});
+			setCookie("accessToken", resData.headers['accesstoken'], {expires: cookieDate, sameSite: 'none', secure: true, path: '/'})
+			if(location.state === undefined){
+				history.push("/mypage",{loginNotice: true});
+			}else{
+				history.push(location.state.redirectUrl);
+			}
 			}
 		).catch((e) => {
 			if(e.response.status === HTTP_STATUS_CODE.BAD_REQUEST){
