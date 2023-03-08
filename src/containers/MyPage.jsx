@@ -13,6 +13,7 @@ import ListItemText from '@mui/material/ListItemText';
 import { FixedSizeList } from 'react-window';
 import MarkAsUnreadOutlinedIcon from '@mui/icons-material/MarkAsUnreadOutlined';
 import { RequestHistoryDialog } from './RequestHistoryDialog';
+import { TwitterPostDialog } from './TwitterPostDialog';
 import { useCookies } from 'react-cookie';
 import Fade from '@mui/material/Fade';
 import CircularProgress from '@mui/material/CircularProgress';
@@ -184,6 +185,7 @@ export const MyPage = () => {
 		isRequestsEmpty: false,
 		hasRequests: false,
 		isOpenDialog: false,
+		isOpenTwitterDialog: false,
 	}
 
 	const initialDialogInfo = {
@@ -282,6 +284,9 @@ export const MyPage = () => {
 							color='secondary'
 							startIcon={<TwitterIcon/ >}
 							sx={{ color: 'white', bgcolor: 'twitter.main'}}
+							onClick={()=>{
+								setState({...state, isOpenTwitterDialog: true})
+							}}
 							>
 							TwitterでURLをシェア！
 							</PostButton>
@@ -333,6 +338,16 @@ export const MyPage = () => {
 				onClose={() => setState({
 					...state,
 					isOpenDialog: false,
+				})}
+				/>
+			}
+			{
+				state.isOpenTwitterDialog &&
+				<TwitterPostDialog
+				isOpen={state.isOpenTwitterDialog}
+				onClose={() => setState({
+					...state,
+					isOpenTwitterDialog: false,
 				})}
 				/>
 			}
