@@ -86,9 +86,6 @@ export const Message = (props) => {
 	
 	return(
 		<>
-		{
-			console.log(props.message)
-		}
 		<MessageListItem>
 			<Value>{props.message}</Value>
 		</MessageListItem>
