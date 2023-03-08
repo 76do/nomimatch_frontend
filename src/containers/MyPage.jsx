@@ -21,6 +21,8 @@ import{
 } from "react-router-dom";
 import {usePageTracking} from '../functions/useTracking';
 import Drawer from '@mui/material/Drawer';
+import Button from '@mui/material/Button';
+import TwitterIcon from '@mui/icons-material/Twitter';
 
 export const MyPage = () => {
 	usePageTracking();
@@ -34,6 +36,12 @@ export const MyPage = () => {
 			},	
 			primary: {
 				main: '#ffa500'
+			},
+			secondary: {
+				main: '#00bfff'
+			},
+			twitter: {
+				main: '#1da1f2'
 			}
 		},
 	});
@@ -140,6 +148,11 @@ export const MyPage = () => {
 		fontFamily: 'HiraKakuProN-W6',
 		color: theme.palette.text.primary,
 	}));
+
+	const PostButton = styled(Button)({
+		textTransform: 'none',
+		marginTop: 10,
+	});
 
 	function renderRow(props) {
   	const { index, style } = props;
@@ -254,15 +267,25 @@ export const MyPage = () => {
 					}
 					{
 					fetchState.fetched &&
-						<TextField
-						fullWidth
-						label="飲み会依頼入力URL（読み取り専用）"
-						defaultValue={`https://www.nomimatch.com/users/${userInfo.random_id}/request`}	
-						InputProps={{
-							readOnly: true,
-						}}
-						sx={{ mt: 1}}
-						/>
+						<>
+							<TextField
+							fullWidth
+							label="飲み会依頼入力URL（読み取り専用）"
+							defaultValue={`https://www.nomimatch.com/users/${userInfo.random_id}/request`}	
+							InputProps={{
+								readOnly: true,
+							}}
+							sx={{ mt: 1}}
+							/>
+							<PostButton 
+							variant="contained" 
+							color='secondary'
+							startIcon={<TwitterIcon/ >}
+							sx={{ color: 'white', bgcolor: 'twitter.main'}}
+							>
+							TwitterでURLをシェア！
+							</PostButton>
+						</>
 					}
 					</URLWrapper>
 					<RequestsWrapper>	
