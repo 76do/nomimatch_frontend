@@ -78,6 +78,7 @@ export const OpponentMessage = (props) => {
 		maxWidth: '80%',
 		width: 'auto',
 		overflowWrap: 'break-word',
+		whiteSpace: 'pre-wrap',
 	});
 
 	

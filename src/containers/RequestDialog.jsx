@@ -8,6 +8,7 @@ import {styled, ThemeProvider, createTheme} from '@mui/material/styles';
 import Cheers from '../images/Beer Celebration-rafiki.png';
 import { TIME, NUMBER_OF_PEOPLE, BUDGET } from '../constants'
 import { setAtmosphere } from '../functions/setAtmosphere';
+import { useCookies } from 'react-cookie';
 import{
 	useHistory,
 } from "react-router-dom";
@@ -92,6 +93,8 @@ export const RequestDialog = ({
 	});
 
 	const history = useHistory();
+	const cookiesArray = useCookies(["accessToken"]);
+	const cookies = cookiesArray[0]
 
 	return (
 		<ThemeProvider theme={Theme}>
@@ -152,16 +155,32 @@ export const RequestDialog = ({
 				送信完了!
 				</TitleWrapper>
 				<ButtonWrapper>
-				<SubmitButton
-				sx={{ bgcolor: 'main.primary' }}
-				variant='outlined'
-				color='inherit'
-				onClick={()=>{
-					history.push("/", {logoutNotice: false});
-				}}
-				>
-				トップページへ
-				</SubmitButton>
+				{
+					cookies.accessToken &&
+					<SubmitButton
+					sx={{ bgcolor: 'main.primary' }}
+					variant='outlined'
+					color='inherit'
+					onClick={()=>{
+						history.push("/mypage", {loginNotice: false});
+					}}
+					>
+					マイページへ
+					</SubmitButton>
+				}
+				{
+					!cookies.accessToken &&
+					<SubmitButton
+					sx={{ bgcolor: 'main.primary' }}
+					variant='outlined'
+					color='inherit'
+					onClick={()=>{
+						history.push("/", {logoutNotice: false});
+					}}
+					>
+					トップページへ
+					</SubmitButton>
+				}
 				</ButtonWrapper>
 			</DialogContent>
 		}

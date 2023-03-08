@@ -128,14 +128,14 @@ export const Chats = () => {
 					<Grid container>
 						<Grid item xs={10}>
 							<ListItemText
-							  primary={chatsInfo[String(index)].opponent['0'].name}
+							  primary={chatsInfo[String(index)].opponent.name}
 							  secondary={
 								<React.Fragment>
 								{chatsInfo[String(index)].chat_message[String(chat_message_length - 1)].message.substr(0, 5) + '...'}
 								</React.Fragment>
 							  }
 						  	  onClick={()=>{
-								  history.push('/chat', {opponentName: chatsInfo[String(index)].opponent['0'].name, 
+								  history.push('/chat', {opponentName: chatsInfo[String(index)].opponent.name, 
 									  messageInfo: chatsInfo[String(index)].chat_message,
 									  roomId: chatsInfo[String(index)].id,
 								 })

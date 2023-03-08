@@ -1,4 +1,4 @@
-import React, {Fragment, useState, useEffect} from 'react';
+import React, {Fragment, useState, useLayoutEffect, useContext, useEffect} from 'react';
 import Button from '@mui/material/Button';
 import {styled, ThemeProvider, createTheme} from '@mui/material/styles';
 import Container from '@mui/material/Container';
@@ -24,6 +24,8 @@ import { RequestDialog } from './RequestDialog';
 import { RegisterRecommendDialog } from './RegisterRecommendDialog';
 import {usePageTracking} from '../functions/useTracking';
 import { useCookies } from 'react-cookie';
+import { UserInfoContext } from '../providers/UserInfoProvider';
+import { getCurrentUser } from '../apis/GetCurrentUserInfo';
 
 export const RequestForm = ({
 	match
@@ -144,6 +146,7 @@ export const RequestForm = ({
 		budget: "",
 		atmosphere: "",
 		message: "",
+		senderUserId: "",
 	};
 
 	const[state, setState] = useState(initialState);
@@ -176,6 +179,7 @@ export const RequestForm = ({
 						budget: data.budget,
 						atmosphere: data.atmosphere,
 						message: data.message,
+						senderUserId: userInfo.random_id, 
 					 }
 		setRequest({...request, ...params})
 		setState({...state, isOpenDialog: true})
@@ -200,10 +204,21 @@ export const RequestForm = ({
 	};
 
 	const cookies  = useCookies(['accessToken'])[0];
+	const {userInfo, setUserInfo} = useContext(UserInfoContext);
 
 	useEffect(()=> {
 		window.scrollTo({ top: 0, behavior: "smooth"})
 	}, [errors])
+
+	useLayoutEffect(() => {
+		if((cookies.accessToken) && (userInfo.id === '')){
+			getCurrentUser(cookies.accessToken)
+			.then((data) => {
+				setUserInfo({id: data['data'].id, name: data['data']['attributes']['name'], random_id: data['data']['attributes']['random_id'] })
+			}).catch((e) => {
+			})
+		}
+	},[])
 
 	return(
 		<Fragment>
@@ -249,22 +264,44 @@ export const RequestForm = ({
 						<Grid item xs={12} sm={5}>
 						<FormWrapper>
 						<Stack spacing={3} alignItems="center">
-						<Controller
-							name="name"
-							control={control}
-							defaultValue=""
-							render={({ field }) => (
-								<TextField 
-								{...field}
-								fullWidth 
-								required 
-								label="あなたの名前"  
-								type="name"
-								error={!!errors.name}
-								helperText={errors.name?.message}
+						{
+							cookies.accessToken &&
+							<Controller
+								name="name"
+								control={control}
+								defaultValue={userInfo.name}
+								render={({ field }) => (
+									<TextField 
+									{...field}
+									fullWidth 
+									disabled
+									label="あなたの名前"  
+									type="name"
+									error={!!errors.name}
+									helperText={errors.name?.message}
+								/>
+								)}
 							/>
-							)}
-						/>
+						}
+						{
+							!cookies.accessToken &&
+							<Controller
+								name="name"
+								control={control}
+								defaultValue=""
+								render={({ field }) => (
+									<TextField 
+									{...field}
+									fullWidth 
+									required 
+									label="あなたの名前"  
+									type="name"
+									error={!!errors.name}
+									helperText={errors.name?.message}
+								/>
+								)}
+							/>
+						}
 
 						<Controller
 							name="shop"
