@@ -13,7 +13,6 @@ import ListItemText from '@mui/material/ListItemText';
 import { FixedSizeList } from 'react-window';
 import MarkAsUnreadOutlinedIcon from '@mui/icons-material/MarkAsUnreadOutlined';
 import { RequestHistoryDialog } from './RequestHistoryDialog';
-import { TwitterPostDialog } from './TwitterPostDialog';
 import { useCookies } from 'react-cookie';
 import Fade from '@mui/material/Fade';
 import CircularProgress from '@mui/material/CircularProgress';
@@ -24,6 +23,7 @@ import {usePageTracking} from '../functions/useTracking';
 import Drawer from '@mui/material/Drawer';
 import Button from '@mui/material/Button';
 import TwitterIcon from '@mui/icons-material/Twitter';
+import { TwitterShareButton } from "react-share";
 
 export const MyPage = () => {
 	usePageTracking();
@@ -155,6 +155,24 @@ export const MyPage = () => {
 		marginTop: 10,
 	});
 
+	const ButtonWrapper = styled('div')(({theme}) => ({
+		fontSize: 14,
+		display: 'flex',
+		justifyContent: 'center',
+		backgroundColor: theme.palette.twitter.main,
+		color: 'white',
+		marginTop: 10,
+		paddingTop: 5,
+		paddingBottom: 5,
+		paddingLeft: 10,
+		paddingRight: 10,
+		borderRadius: 15,
+		transition: '.2s',
+		"&:hover": {
+			backgroundColor: theme.palette.secondary.main,
+		}
+	}));
+
 	function renderRow(props) {
   	const { index, style } = props;
 
@@ -185,7 +203,6 @@ export const MyPage = () => {
 		isRequestsEmpty: false,
 		hasRequests: false,
 		isOpenDialog: false,
-		isOpenTwitterDialog: false,
 	}
 
 	const initialDialogInfo = {
@@ -279,17 +296,12 @@ export const MyPage = () => {
 							}}
 							sx={{ mt: 1}}
 							/>
-							<PostButton 
-							variant="contained" 
-							color='secondary'
-							startIcon={<TwitterIcon/ >}
-							sx={{ color: 'white', bgcolor: 'twitter.main'}}
-							onClick={()=>{
-								setState({...state, isOpenTwitterDialog: true})
-							}}
-							>
+							<TwitterShareButton url={"https://www.nomimatch.com"} title={`${userInfo.name}さんへの飲み会依頼は以下リンクから！`} hashtags={["ノミマチ","飲み会依頼募集中"]}>
+							<ButtonWrapper>
+							<TwitterIcon sx={{mr: 1}}/>
 							TwitterでURLをシェア！
-							</PostButton>
+							</ButtonWrapper>
+							</TwitterShareButton>
 						</>
 					}
 					</URLWrapper>
@@ -338,16 +350,6 @@ export const MyPage = () => {
 				onClose={() => setState({
 					...state,
 					isOpenDialog: false,
-				})}
-				/>
-			}
-			{
-				state.isOpenTwitterDialog &&
-				<TwitterPostDialog
-				isOpen={state.isOpenTwitterDialog}
-				onClose={() => setState({
-					...state,
-					isOpenTwitterDialog: false,
 				})}
 				/>
 			}

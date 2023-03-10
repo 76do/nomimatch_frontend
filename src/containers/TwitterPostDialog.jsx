@@ -15,8 +15,10 @@ import{
 import FormControlLabel from '@mui/material/FormControlLabel';
 import Checkbox from '@mui/material/Checkbox';
 import TwitterIcon from '@mui/icons-material/Twitter';
+import { TwitterAuth } from '../apis/TwitterAuth';
 
 export const TwitterPostDialog = ({
+	accessToken,
 	isOpen,
 	onClose,
 }) => {
@@ -162,6 +164,15 @@ export const TwitterPostDialog = ({
 		setIsAutoPost(!isAutoPost);
 	};
 
+	const handleSend = () => {
+		console.log('hoge')
+		TwitterAuth(accessToken)
+		.then(()=>{
+		}).catch((e) => {
+			console.log(e)
+		})
+	};
+
 	return (
 		<ThemeProvider theme={Theme}>
 		<Dialog
@@ -194,9 +205,7 @@ export const TwitterPostDialog = ({
 			color='secondary'
 			startIcon={<TwitterIcon/ >}
 			sx={{ color: 'white', bgcolor: 'twitter.main'}}
-			onClick={
-				onClose
-			}
+			onClick={handleSend}
 			>
 			Twitterでシェア！
 			</PostButton>
