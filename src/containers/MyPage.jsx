@@ -21,6 +21,9 @@ import{
 } from "react-router-dom";
 import {usePageTracking} from '../functions/useTracking';
 import Drawer from '@mui/material/Drawer';
+import Button from '@mui/material/Button';
+import TwitterIcon from '@mui/icons-material/Twitter';
+import { TwitterShareButton } from "react-share";
 
 export const MyPage = () => {
 	usePageTracking();
@@ -34,6 +37,12 @@ export const MyPage = () => {
 			},	
 			primary: {
 				main: '#ffa500'
+			},
+			secondary: {
+				main: '#00bfff'
+			},
+			twitter: {
+				main: '#1da1f2'
 			}
 		},
 	});
@@ -139,6 +148,29 @@ export const MyPage = () => {
 		},
 		fontFamily: 'HiraKakuProN-W6',
 		color: theme.palette.text.primary,
+	}));
+
+	const PostButton = styled(Button)({
+		textTransform: 'none',
+		marginTop: 10,
+	});
+
+	const ButtonWrapper = styled('div')(({theme}) => ({
+		fontSize: 14,
+		display: 'flex',
+		justifyContent: 'center',
+		backgroundColor: theme.palette.twitter.main,
+		color: 'white',
+		marginTop: 10,
+		paddingTop: 5,
+		paddingBottom: 5,
+		paddingLeft: 10,
+		paddingRight: 10,
+		borderRadius: 15,
+		transition: '.2s',
+		"&:hover": {
+			backgroundColor: theme.palette.secondary.main,
+		}
 	}));
 
 	function renderRow(props) {
@@ -254,15 +286,23 @@ export const MyPage = () => {
 					}
 					{
 					fetchState.fetched &&
-						<TextField
-						fullWidth
-						label="飲み会依頼入力URL（読み取り専用）"
-						defaultValue={`https://www.nomimatch.com/users/${userInfo.random_id}/request`}	
-						InputProps={{
-							readOnly: true,
-						}}
-						sx={{ mt: 1}}
-						/>
+						<>
+							<TextField
+							fullWidth
+							label="飲み会依頼入力URL（読み取り専用）"
+							defaultValue={`https://www.nomimatch.com/users/${userInfo.random_id}/request`}	
+							InputProps={{
+								readOnly: true,
+							}}
+							sx={{ mt: 1}}
+							/>
+							<TwitterShareButton url={`https://www.nomimatch.com/users/${userInfo.random_id}/request`} title={`${userInfo.name}さんへの飲み会依頼は以下リンクから！`} hashtags={["ノミマチ","飲み会依頼募集中"]}>
+							<ButtonWrapper>
+							<TwitterIcon sx={{mr: 1}}/>
+							TwitterでURLをシェア！
+							</ButtonWrapper>
+							</TwitterShareButton>
+						</>
 					}
 					</URLWrapper>
 					<RequestsWrapper>	

@@ -1,4 +1,4 @@
-const DEFAULT_API_LOCALHOST = process.env.REACT_APP_API_URL 
+const DEFAULT_API_LOCALHOST = 'http://localhost:3000/api/v1' 
 
 export const signIn = `${DEFAULT_API_LOCALHOST}/registration`
 export const authentication = `${DEFAULT_API_LOCALHOST}/authentication`
@@ -9,3 +9,5 @@ export const receiverName = (userId) =>
 export const requests = `${DEFAULT_API_LOCALHOST}/user/requests`
 export const currentUser = `${DEFAULT_API_LOCALHOST}/current_user`
 export const chats = `${DEFAULT_API_LOCALHOST}/chats`
+export const twitterAuth = `${DEFAULT_API_LOCALHOST}/oauth/twitter`
+
