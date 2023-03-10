@@ -53,6 +53,11 @@ export const Setting = () => {
 	});
 	const cookies  = useCookies(['accessToken'])[0];
 	const {userInfo, setUserInfo} = useContext(UserInfoContext);
+	const initialFetchState = {
+		fetching: true,
+		fetched: false 
+	};
+	const [fetchState, setFetchState] = useState(initialFetchState);
 
 	const SettingTitle = styled('div')({
 		paddingTop: 85,
@@ -84,6 +89,12 @@ export const Setting = () => {
 		flexFlow: 'column',
 		alignItems: 'center',
 		width: '90%',
+	});
+
+	const CircularWrapper = styled('div')({
+		paddingTop: 60,
+		display: 'flex',
+		justifyContent: 'center',
 	});
 
 	const SubmitButton = styled(Button)(({ theme, props }) => ({
@@ -118,10 +129,14 @@ export const Setting = () => {
 			getCurrentUser(cookies.accessToken)
 			.then((data) => {
 				setUserInfo({id: data['data'].id, name: data['data']['attributes']['name'], random_id: data['data']['attributes']['random_id'] })
+				setFetchState({fetching: false, fetched: true})
 			}).catch((e) => {
 			})
+		}else{
+			setFetchState({fetching: false, fetched: true})
 		}
 	},[])
+
 
 	return(
 		<Fragment>
@@ -134,36 +149,48 @@ export const Setting = () => {
 				{
 					cookies.accessToken &&
 						<Stack alignItems="center">
-						<SettingTitle>
-						設定
-						</SettingTitle>
-						<SettingWrapper>
-						<UserNameWrapper>
-						<Controller
-							name="name"
-							control={control}
-							defaultValue={userInfo.name}
-							render={({field}) => (
-								<TextField
-								{...field}
-								sx={{ mb: 3}}
-								fullWidth
-								required
-								label="ユーザー名"
-								error={"name" in errors}
-								helperText={errors.name?.message}
-								/>
-							)}/>
-						</UserNameWrapper>
-						<SubmitButton
-						sx={{ bgcolor: 'main.primary'}}
-						variant='outlined'
-						color='inherit'
-						onClick={handleSubmit(onSubmit)}
-						>
-						更新
-						</SubmitButton>
-						</SettingWrapper>
+						{
+							fetchState.fetching &&
+								<CircularWrapper>
+									<CircularProgress 
+									size={50}/>
+								</CircularWrapper>
+						}
+						{
+							fetchState.fetched &&
+							<>
+							<SettingTitle>
+							設定
+							</SettingTitle>
+							<SettingWrapper>
+							<UserNameWrapper>
+							<Controller
+								name="name"
+								control={control}
+								defaultValue={userInfo.name}
+								render={({field}) => (
+									<TextField
+									{...field}
+									sx={{ mb: 3}}
+									fullWidth
+									required
+									label="ユーザー名"
+									error={"name" in errors}
+									helperText={errors.name?.message}
+									/>
+								)}/>
+							</UserNameWrapper>
+							<SubmitButton
+							sx={{ bgcolor: 'main.primary'}}
+							variant='outlined'
+							color='inherit'
+							onClick={handleSubmit(onSubmit)}
+							>
+							更新
+							</SubmitButton>
+							</SettingWrapper>
+							</>
+						}
 						</Stack>
 				}
 			</Container>
