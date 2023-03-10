@@ -296,7 +296,7 @@ export const MyPage = () => {
 							}}
 							sx={{ mt: 1}}
 							/>
-							<TwitterShareButton url={"https://www.nomimatch.com"} title={`${userInfo.name}さんへの飲み会依頼は以下リンクから！`} hashtags={["ノミマチ","飲み会依頼募集中"]}>
+							<TwitterShareButton url={`https://www.nomimatch.com/users/${userInfo.random_id}/request`} title={`${userInfo.name}さんへの飲み会依頼は以下リンクから！`} hashtags={["ノミマチ","飲み会依頼募集中"]}>
 							<ButtonWrapper>
 							<TwitterIcon sx={{mr: 1}}/>
 							TwitterでURLをシェア！
