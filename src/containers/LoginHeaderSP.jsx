@@ -90,7 +90,7 @@ export const LoginHeaderSP = () => {
             				color="inherit"
             				aria-label="menu"
 							onClick={()=>{
-								history.push("/notready");
+								history.push("/settingsp");
 							}}
           					>
 	  							<SettingsOutlinedIcon 

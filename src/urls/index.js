@@ -10,4 +10,4 @@ export const requests = `${DEFAULT_API_LOCALHOST}/user/requests`
 export const currentUser = `${DEFAULT_API_LOCALHOST}/current_user`
 export const chats = `${DEFAULT_API_LOCALHOST}/chats`
 export const twitterAuth = `${DEFAULT_API_LOCALHOST}/oauth/twitter`
-
+export const userUpdate = `${DEFAULT_API_LOCALHOST}/registration`
