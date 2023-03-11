@@ -21,6 +21,7 @@ import {Chat} from './containers/Chat.jsx';
 import {Setting} from './containers/Setting.jsx';
 import {SettingSP} from './containers/SettingSP.jsx';
 import {PrivacyPolicy} from './containers/PrivacyPolicy.jsx';
+import {TermsOfService} from './containers/TermsOfService.jsx';
 import {styled, ThemeProvider, createTheme} from '@mui/system';
 import {useCookies} from 'react-cookie';
 import { UserInfoContext } from './providers/UserInfoProvider';
@@ -101,8 +102,8 @@ function App() {
 	  						<Route path="/privacypolicy">
 	  							<PrivacyPolicy/>
 	  						</Route>
-	  						<Route path="/notready">
-	  							<NotReady/>
+	  						<Route path="/termsofservice">
+	  							<TermsOfService/>
 	  						</Route>
 	  					</Switch>
 					</BaseComponent>
