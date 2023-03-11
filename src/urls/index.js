@@ -1,4 +1,4 @@
-const DEFAULT_API_LOCALHOST = 'http://localhost:3000/api/v1' 
+const DEFAULT_API_LOCALHOST = process.env.REACT_APP_API_URL
 
 export const signIn = `${DEFAULT_API_LOCALHOST}/registration`
 export const authentication = `${DEFAULT_API_LOCALHOST}/authentication`
