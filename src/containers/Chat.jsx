@@ -100,7 +100,7 @@ export const Chat = (props) => {
 	const [messages, setMessages] = useState(location.state.messageInfo);
 	const [roomId] = useState(location.state.roomId);
 	const [fetchState, setFetchState] = useState(initialFetchState);
-	const cable = useMemo(() => ActionCable.createConsumer(`ws://api.nomimatch.com/cable?token=${cookies.accessToken}`),[]);
+	const cable = useMemo(() => ActionCable.createConsumer(`wss://api.nomimatch.com/cable?token=${cookies.accessToken}`),[]);
 
 	useEffect(() => {
         const scrollArea = document.getElementById('scroll-area');
