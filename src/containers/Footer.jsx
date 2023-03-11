@@ -53,7 +53,7 @@ export const Footer = () => {
 					<FooterButton
 					onClick={()=>{
 						window.scrollTo({ top: 0, behavior: "smooth"})
-						history.push('/notready')
+						history.push('/privacypolicy')
 					}}
 					>プライバシーポリシー</FooterButton>
 					<FooterButton
