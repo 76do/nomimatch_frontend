@@ -20,8 +20,6 @@ import{
 	useLocation
 } from "react-router-dom";
 import {usePageTracking} from '../functions/useTracking';
-import Drawer from '@mui/material/Drawer';
-import Button from '@mui/material/Button';
 import TwitterIcon from '@mui/icons-material/Twitter';
 import { TwitterShareButton } from "react-share";
 
@@ -149,11 +147,6 @@ export const MyPage = () => {
 		fontFamily: 'HiraKakuProN-W6',
 		color: theme.palette.text.primary,
 	}));
-
-	const PostButton = styled(Button)({
-		textTransform: 'none',
-		marginTop: 10,
-	});
 
 	const ButtonWrapper = styled('div')(({theme}) => ({
 		fontSize: 14,

@@ -1,41 +1,8 @@
-import React, {Fragment, useState, useContext, useEffect, useLayoutEffect} from 'react';
+import React, {Fragment} from 'react';
 import {styled, ThemeProvider, createTheme} from '@mui/material/styles';
 import Container from '@mui/material/Container';
-import TextField from '@mui/material/TextField';
 import Stack from '@mui/material/Stack';
-import { getUserRequests } from '../apis/GetRequests';
-import { getCurrentUser } from '../apis/GetCurrentUserInfo';
-import { getChats } from '../apis/GetChats';
-import { UserUpdate } from '../apis/UserUpdate';
-import Alert from '@mui/material/Alert';
-import { UserInfoContext } from '../providers/UserInfoProvider';
-import ListItemButton from '@mui/material/ListItemButton';
-import { FixedSizeList } from 'react-window';
-import MarkAsUnreadOutlinedIcon from '@mui/icons-material/MarkAsUnreadOutlined';
-import { RequestHistoryDialog } from './RequestHistoryDialog';
-import { useCookies } from 'react-cookie';
-import Fade from '@mui/material/Fade';
-import CircularProgress from '@mui/material/CircularProgress';
-import{
-	useLocation
-} from "react-router-dom";
 import {usePageTracking} from '../functions/useTracking';
-import List from '@mui/material/List';
-import ListItem from '@mui/material/ListItem';
-import Divider from '@mui/material/Divider';
-import ListItemText from '@mui/material/ListItemText';
-import ListItemAvatar from '@mui/material/ListItemAvatar';
-import Avatar from '@mui/material/Avatar';
-import Typography from '@mui/material/Typography';
-import ChatIcon from '@mui/icons-material/Chat';
-import Grid from '@mui/material/Grid';
-import Button from '@mui/material/Button';
-import { useForm, Controller } from 'react-hook-form';
-import { yupResolver } from '@hookform/resolvers/yup';
-import * as yup from 'yup';
-import{
-	useHistory,
-} from "react-router-dom";
 
 export const TermsOfService = () => {
 	usePageTracking();
@@ -52,17 +19,6 @@ export const TermsOfService = () => {
 			}
 		},
 	});
-	const cookies  = useCookies(['accessToken'])[0];
-	const {userInfo, setUserInfo} = useContext(UserInfoContext);
-	const initialFetchState = {
-		fetching: true,
-		fetched: false 
-	};
-	const [fetchState, setFetchState] = useState(initialFetchState);
-	const initialState = {
-		updateSuccess: false,
-	};
-	const [state, setState] = useState(initialState);
 
 	const TermsOfServiceTitle = styled('div')({
 		marginBottom: 25,
@@ -104,10 +60,6 @@ export const TermsOfService = () => {
 		"@media screen and (max-width:480px)":{
 			fontSize: 10,
 		},
-	});
-
-	const UrlLink = styled('a')({
-		wordBreak: 'break-all',
 	});
 
 	return(

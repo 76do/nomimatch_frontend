@@ -1,11 +1,10 @@
-import React, { Fragment, useContext } from 'react';
+import React, { Fragment } from 'react';
 import Dialog from '@mui/material/Dialog';
 import DialogContent from '@mui/material/DialogContent';
 import DialogTitle from '@mui/material/DialogTitle';
 import {styled, ThemeProvider, createTheme} from '@mui/material/styles';
 import { TIME, NUMBER_OF_PEOPLE, BUDGET } from '../constants'
 import { setAtmosphere } from '../functions/setAtmosphere';
-import { UserInfoContext } from '../providers/UserInfoProvider';
 
 
 export const RequestHistoryDialog = ({
@@ -57,8 +56,6 @@ export const RequestHistoryDialog = ({
 	const RequestItemName = styled('span')({
 		fontWeight: 'bold',
 	});
-	
-	const {userInfo} = useContext(UserInfoContext);
 
 	return (
 		<ThemeProvider theme={Theme}>

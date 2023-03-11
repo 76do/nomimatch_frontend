@@ -1,4 +1,4 @@
-import React, {Fragment, useState, useContext, useLayoutEffect} from 'react';
+import React from 'react';
 import AppBar from '@mui/material/AppBar';
 import Box from '@mui/material/Box';
 import Toolbar from '@mui/material/Toolbar';
@@ -13,7 +13,6 @@ import{
 import { LogOut } from '../apis/LogOut';
 import { useCookies } from 'react-cookie';
 import SettingsOutlinedIcon from '@mui/icons-material/SettingsOutlined';
-import { UserInfoContext } from '../providers/UserInfoProvider';
 
 export const LoginHeader = () => {
 

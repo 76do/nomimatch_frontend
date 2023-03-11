@@ -4,7 +4,7 @@ import{
 	Switch,
 	Route,
 } from "react-router-dom";
-import React, { useContext, useEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import {Top} from './containers/Top.jsx';
 import {SignIn} from './containers/SignIn.jsx';
 import {LogIn} from './containers/LogIn.jsx';
@@ -15,7 +15,6 @@ import {LoginHeader} from './containers/LoginHeader.jsx';
 import {LoginHeaderSP} from './containers/LoginHeaderSP.jsx';
 import {Footer} from './containers/Footer.jsx';
 import {LoginFooterSP} from './containers/LoginFooterSP.jsx';
-import {NotReady} from './containers/NotReady.jsx';
 import {Chats} from './containers/Chats.jsx';
 import {Chat} from './containers/Chat.jsx';
 import {Setting} from './containers/Setting.jsx';
@@ -24,8 +23,6 @@ import {PrivacyPolicy} from './containers/PrivacyPolicy.jsx';
 import {TermsOfService} from './containers/TermsOfService.jsx';
 import {styled, ThemeProvider, createTheme} from '@mui/system';
 import {useCookies} from 'react-cookie';
-import { UserInfoContext } from './providers/UserInfoProvider';
-import { getCurrentUser } from './apis/GetCurrentUserInfo';
 
 function App() {
 	const Theme = createTheme({

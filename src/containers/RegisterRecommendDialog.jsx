@@ -1,13 +1,8 @@
-import React, { Fragment } from 'react';
+import React from 'react';
 import Dialog from '@mui/material/Dialog';
-import DialogActions from '@mui/material/DialogActions';
 import DialogContent from '@mui/material/DialogContent';
-import DialogTitle from '@mui/material/DialogTitle';
 import Button from '@mui/material/Button';
 import {styled, ThemeProvider, createTheme} from '@mui/material/styles';
-import Cheers from '../images/Beer Celebration-rafiki.png';
-import { TIME, NUMBER_OF_PEOPLE, BUDGET } from '../constants'
-import { setAtmosphere } from '../functions/setAtmosphere';
 import{
 	useHistory,
 	useLocation
@@ -39,30 +34,10 @@ export const RegisterRecommendDialog = ({
 			fontSize: 12,
 		},
 	});
-	
-	const ContentWrapper = styled('div')({
-		paddingRight: 15,
-		paddingLeft: 15,
-		border: 'solid 1px #333',
-		borderRadius: 10,
-	});
 
 	const ReceiverName = styled('span')(({ theme }) => ({
 		color: theme.palette.main.primary,
 	}));
-
-	const RequestWrapper = styled('div')({
-		paddingTop: 30,
-		paddingBottom: 20,
-	});
-
-	const RequestItemName = styled('span')({
-		fontWeight: 'bold',
-	});
-
-	const  ActionsWrapper = styled('div')({
-		margin: '0 auto',
-	});
 
 	const EmphasizedButton = styled(Button)(({ theme }) => ({
 		width: 200,
@@ -88,14 +63,6 @@ export const RegisterRecommendDialog = ({
 			fontSize: 8,
 		},
 	}));
-
-	const ImageWrapper = styled('div')({
-		textAlign: 'center',
-	});
-
-	const RequestFinishImage = styled('img')({
-		width: '70%',
-	});
 	
 	const ButtonWrapperTop = styled('div')({
 		display: 'flex',
@@ -116,11 +83,6 @@ export const RegisterRecommendDialog = ({
 	const ButtonWrapperButtom = styled('div')({
 		display: 'flex',
 		justifyContent: 'center',
-	});
-
-	const ButtonWrapper = styled('div')({
-		textAlign: 'center',
-		marginTop: 30,
 	});
 
 	const location = useLocation();

@@ -5,31 +5,15 @@ import {OpponentMessage} from './OpponentMessage'
 import {Message} from './Message'
 import Container from '@mui/material/Container';
 import TextField from '@mui/material/TextField';
-import Stack from '@mui/material/Stack';
-import { getUserRequests } from '../apis/GetRequests';
 import { getCurrentUser } from '../apis/GetCurrentUserInfo';
-import Alert from '@mui/material/Alert';
 import { UserInfoContext } from '../providers/UserInfoProvider';
-import ListItemButton from '@mui/material/ListItemButton';
-import { FixedSizeList } from 'react-window';
-import MarkAsUnreadOutlinedIcon from '@mui/icons-material/MarkAsUnreadOutlined';
-import { RequestHistoryDialog } from './RequestHistoryDialog';
 import { useCookies } from 'react-cookie';
-import Fade from '@mui/material/Fade';
 import CircularProgress from '@mui/material/CircularProgress';
 import{
 	useLocation
 } from "react-router-dom";
 import {usePageTracking} from '../functions/useTracking';
 import List from '@mui/material/List';
-import ListItem from '@mui/material/ListItem';
-import Divider from '@mui/material/Divider';
-import ListItemText from '@mui/material/ListItemText';
-import ListItemAvatar from '@mui/material/ListItemAvatar';
-import Avatar from '@mui/material/Avatar';
-import Typography from '@mui/material/Typography';
-import ChatIcon from '@mui/icons-material/Chat';
-import Grid from '@mui/material/Grid';
 import Button from '@mui/material/Button';
 import ActionCable from 'actioncable';
 
@@ -84,11 +68,6 @@ export const Chat = (props) => {
 		justifyContent: 'center',
 	});
 
-	const ChatsTime = styled('div')({
-		fontSize: 8,
-		fontFamily: 'HiraKakuProN-W6',
-	});
-
 	const MessageList = styled(List)({
 		height: 400,
 		marginBottom: 10,
@@ -119,9 +98,7 @@ export const Chat = (props) => {
 	const cookies  = useCookies(['accessToken'])[0];
 	const location = useLocation();
 	const [messages, setMessages] = useState(location.state.messageInfo);
-	const [roomId, setRoomId] = useState(location.state.roomId);
-	const [message, setMessage] = useState('');
-	const [userId, setUserId] = useState(Number(userInfo.id));
+	const [roomId] = useState(location.state.roomId);
 	const [fetchState, setFetchState] = useState(initialFetchState);
 	const cable = useMemo(() => ActionCable.createConsumer(`ws://localhost:3000/cable?token=${cookies.accessToken}`),[]);
 
