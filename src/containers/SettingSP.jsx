@@ -37,7 +37,7 @@ import{
 	useHistory,
 } from "react-router-dom";
 
-export const Setting = () => {
+export const SettingSP = () => {
 	usePageTracking();
 	const Theme = createTheme({
 		palette: {
@@ -63,9 +63,10 @@ export const Setting = () => {
 		updateSuccess: false,
 	};
 	const [state, setState] = useState(initialState);
+	const history = useHistory();
 
 	const SettingTitle = styled('div')({
-		marginBottom: 65,
+		marginBottom: 20,
 		fontSize: 30,
 		fontFamily: 'HiraKakuProN-W6',
 		textAlign: 'center',
@@ -75,10 +76,7 @@ export const Setting = () => {
 		display: 'flex',
 		flexFlow: 'column',
 		alignItems: 'center',
-		width: '50%',
-		"@media screen and (max-width:480px)":{
-			width: '90%',
-		},
+		width: '90%',
 		paddingTop: 30,
 		paddingBottom: 30,
 		paddingLeft:15,
@@ -110,15 +108,20 @@ export const Setting = () => {
 	});
 
 	const SubmitButton = styled(Button)(({ theme, props }) => ({
-		width: 200,
-		fontSize: 15,
 		color: theme.palette.text.primary,
 		fontFamily: 'HiraKakuProN-W6',
 		borderRadius: 50,
-		"@media screen and (max-width:480px)":{
-			width: 150,
-			fontSize: 12,
-		},
+		width: 150,
+		fontSize: 12,
+	}));
+
+	const TransitionButton = styled(Button)(({ theme, props }) => ({
+		marginTop: 15,
+		color: theme.palette.text.primary,
+		fontFamily: 'HiraKakuProN-W6',
+		borderRadius: 50,
+		width: 250,
+		fontSize: 12,
 	}));
 
 	const schema = yup.object({
@@ -217,6 +220,35 @@ export const Setting = () => {
 							更新
 							</SubmitButton>
 							</SettingWrapper>
+							<TransitionButton
+							variant='outlined'
+							color='inherit'
+							onClick={()=>{
+								window.scrollTo({ top: 0, behavior: "smooth"})
+								history.push('/notready')
+							}}
+							>
+							利用規約
+							</TransitionButton>
+							<TransitionButton
+							variant='outlined'
+							color='inherit'
+							onClick={()=>{
+								window.scrollTo({ top: 0, behavior: "smooth"})
+								history.push('/notready')
+							}}
+							>
+							プライバシーポリシー
+							</TransitionButton>
+							<TransitionButton
+							variant='outlined'
+							color='inherit'
+							onClick={()=>{
+								window.open('https://forms.gle/kiXQF4zF5hrYUzUe8');
+							}}
+							>
+							お問い合わせ
+							</TransitionButton>
 							</>
 						}
 						</Stack>

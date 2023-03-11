@@ -19,6 +19,7 @@ import {NotReady} from './containers/NotReady.jsx';
 import {Chats} from './containers/Chats.jsx';
 import {Chat} from './containers/Chat.jsx';
 import {Setting} from './containers/Setting.jsx';
+import {SettingSP} from './containers/SettingSP.jsx';
 import {styled, ThemeProvider, createTheme} from '@mui/system';
 import {useCookies} from 'react-cookie';
 import { UserInfoContext } from './providers/UserInfoProvider';
@@ -89,6 +90,9 @@ function App() {
 	  							<Chat
 								room_id={1}	
 								/>
+	  						</Route>
+	  						<Route path="/settingsp">
+	  							<SettingSP />
 	  						</Route>
 	  						<Route path="/setting">
 	  							<Setting/>

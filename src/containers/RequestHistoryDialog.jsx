@@ -39,8 +39,8 @@ export const RequestHistoryDialog = ({
 		borderRadius: 10,
 	});
 	
-	const ReceiverName = styled('div')({
-		fontSize: 20,
+	const SenderDescription = styled('div')({
+		fontSize: 18,
 		paddingTop: 10,
 		paddingBottom: 30,
 	});
@@ -50,7 +50,7 @@ export const RequestHistoryDialog = ({
 	}));
 
 	const RequestWrapper = styled('div')({
-		paddingTop: 30,
+		paddingTop: 15,
 		paddingBottom: 20,
 	});
 
@@ -74,10 +74,9 @@ export const RequestHistoryDialog = ({
 		</DialogTitle>
 		<DialogContent>
 		<ContentWrapper>
-		<ReceiverName>
-		{userInfo.name}さん<br/>
-		</ReceiverName>
-		<SenderName>{dialogInfo.name}</SenderName>さんから以下内容で飲み会依頼が届いています！<br/>
+		<SenderDescription>
+		<SenderName>{dialogInfo.name}</SenderName>さんから以下内容で飲み会依頼が届いています！
+		</SenderDescription>
 		<RequestWrapper>
 		<div>
 		■飲み会依頼
