@@ -165,7 +165,6 @@ export const TwitterPostDialog = ({
 	};
 
 	const handleSend = () => {
-		console.log('hoge')
 		TwitterAuth(accessToken)
 		.then(()=>{
 		}).catch((e) => {

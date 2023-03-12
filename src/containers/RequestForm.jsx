@@ -124,7 +124,7 @@ export const RequestForm = ({
 	})
 
 
-	const { control, handleSubmit, formState: {errors} } = useForm({
+	const { control, handleSubmit, setValue, formState: {errors} } = useForm({
 		resolver: yupResolver(schema),
 		reValidateMode: 'onSubmit',
 	});
@@ -150,6 +150,7 @@ export const RequestForm = ({
 	};
 
 	const[state, setState] = useState(initialState);
+	const[isLoginUser, setIsLoginUser] = useState(false);
 	const[request, setRequest] = useState(initialRequest);
 
 	useEffect(() => {
@@ -171,8 +172,14 @@ export const RequestForm = ({
 	},[])
 
 	const onSubmit = (data) => {
+		let name
+		if(isLoginUser){
+			name=userInfo.name
+		}else{
+			name=data.name
+		}
 		let params = {
-						name: data.name,
+						name: name,
 						shop: data.shop,
 						time: data.time,
 						numberOfPeople: data.numberOfPeople,
@@ -204,6 +211,7 @@ export const RequestForm = ({
 	};
 
 	const cookies  = useCookies(['accessToken'])[0];
+	const removeCookie = useCookies(['accessToken'])[2];
 	const {userInfo, setUserInfo} = useContext(UserInfoContext);
 
 	useEffect(()=> {
@@ -211,21 +219,32 @@ export const RequestForm = ({
 	}, [errors])
 
 	useLayoutEffect(() => {
-		if((cookies.accessToken) && (userInfo.id === '')){
+		if(cookies.accessToken){
 			getCurrentUser(cookies.accessToken)
 			.then((data) => {
-				setUserInfo({id: data['data'].id, name: data['data']['attributes']['name'], random_id: data['data']['attributes']['random_id'] })
+				setIsLoginUser(true)
+				setUserInfo({id: data['data'].id, name: data['data']['attributes']['name'], random_id: data['data']['attributes']['random_id'] });
+				setValue('name', data['data']['attributes']['name'])
 			}).catch((e) => {
+				setIsLoginUser(false);
+				removeCookie('accessToken', {path: '/'})
 			})
 		}
 	},[])
+	
+	useEffect(() => {
+		if(cookies.accessToken && userInfo.name){
+			setIsLoginUser(true)
+		}
+	},[userInfo])
+
 
 	return(
 		<Fragment>
 			<ThemeProvider theme={Theme}>
 			<Container maxWidth='lg'>
 				{
-					!cookies.accessToken &&
+					!cookies.accessToken && !isLoginUser &&
 					<RegisterRecommendDialog
 					receivername = {request.receiverName}
 					open={state.isOpenRecommendDialog}
@@ -265,17 +284,16 @@ export const RequestForm = ({
 						<FormWrapper>
 						<Stack spacing={3} alignItems="center">
 						{
-							cookies.accessToken &&
+							cookies.accessToken && userInfo.name && isLoginUser &&
 							<Controller
 								name="name"
 								control={control}
-								defaultValue={userInfo.name}
 								render={({ field }) => (
 									<TextField 
 									{...field}
 									fullWidth 
 									disabled
-									label="あなたの名前"  
+									label="あなたのユーザー名"  
 									type="name"
 									error={!!errors.name}
 									helperText={errors.name?.message}
@@ -284,7 +302,7 @@ export const RequestForm = ({
 							/>
 						}
 						{
-							!cookies.accessToken &&
+							(!cookies.accessToken || !isLoginUser) &&
 							<Controller
 								name="name"
 								control={control}

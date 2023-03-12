@@ -4,7 +4,7 @@ import{
 	Switch,
 	Route,
 } from "react-router-dom";
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useLayoutEffect } from 'react';
 import {Top} from './containers/Top.jsx';
 import {SignIn} from './containers/SignIn.jsx';
 import {LogIn} from './containers/LogIn.jsx';
@@ -22,6 +22,7 @@ import {SettingSP} from './containers/SettingSP.jsx';
 import {PrivacyPolicy} from './containers/PrivacyPolicy.jsx';
 import {TermsOfService} from './containers/TermsOfService.jsx';
 import {styled, ThemeProvider, createTheme} from '@mui/system';
+import { getCurrentUser } from './apis/GetCurrentUserInfo';
 import {useCookies} from 'react-cookie';
 
 function App() {
@@ -39,24 +40,38 @@ function App() {
 	}));
 
 	const cookies = useCookies(['accessToken'])[0];
-	const [dimension, setDimension] = useState({width: window.innerWidth})
+	const removeCookie = useCookies(['accessToken'])[2];
+	const [dimension, setDimension] = useState({width: window.innerWidth});
+	const [isLoginUser, setIsLoginUser] = useState(true);
 
 	useEffect(() => {
 		setDimension({width: window.innerWidth})
 	},[])
 
+	useLayoutEffect(() => {
+		if(cookies.accessToken !== undefined){
+			getCurrentUser(cookies.accessToken)
+			.then((data) => {
+				setIsLoginUser(true);	
+			}).catch((e) => {
+				setIsLoginUser(false);
+				removeCookie('accessToken', {path: '/'});
+			})
+		}
+	})
+
   	return (
 	  	<Router>
 			{
-				cookies.accessToken && (dimension.width <= 480) &&
+				cookies.accessToken && isLoginUser && (dimension.width <= 480) &&
 				<LoginHeaderSP/>
 			}
 			{
-				cookies.accessToken && (dimension.width > 480) &&
+				cookies.accessToken && isLoginUser && (dimension.width > 480) &&
 				<LoginHeader/>
 			}
 			{
-				!cookies.accessToken && 
+				(!cookies.accessToken || !isLoginUser) && 
 				<Header/>
 
 			}
@@ -106,11 +121,11 @@ function App() {
 					</BaseComponent>
 				</ThemeProvider>
 			{
-				cookies.accessToken && (dimension.width <= 480) &&
+				cookies.accessToken && isLoginUser && (dimension.width <= 480) &&
 				<LoginFooterSP/>
 			}
 			{
-				!(cookies.accessToken && (dimension.width <= 480)) &&
+				!(cookies.accessToken && isLoginUser && (dimension.width <= 480)) &&
 				<Footer/>
 			}
 	  	</Router>

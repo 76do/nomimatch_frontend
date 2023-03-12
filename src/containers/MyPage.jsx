@@ -196,6 +196,7 @@ export const MyPage = () => {
 		isRequestsEmpty: false,
 		hasRequests: false,
 		isOpenDialog: false,
+		isLoginUser: true,
 	}
 
 	const initialDialogInfo = {
@@ -214,6 +215,7 @@ export const MyPage = () => {
 	}
 
 	const cookies  = useCookies(['accessToken'])[0];
+	const removeCookie = useCookies(['accessToken'])[2];
 	const {userInfo, setUserInfo} = useContext(UserInfoContext);
 	const [requests, setRequests] = useState([]);
 	const [state, setState] = useState(initialState);
@@ -227,6 +229,8 @@ export const MyPage = () => {
 		.then((data) => {
 			setUserInfo({id: data['data'].id, name: data['data']['attributes']['name'], random_id: data['data']['attributes']['random_id'] })
 		}).catch((e) => {
+			setState({...state, isLoginUser: false});
+			removeCookie('accessToken', {path: '/'});
 		})
 		getUserRequests(cookies.accessToken)
 		.then((data) => {
@@ -247,7 +251,7 @@ export const MyPage = () => {
 			<Container maxWidth='lg'>
 			<MessageWrapper>
 				{
-					cookies.accessToken === undefined &&
+					((cookies.accessToken === undefined) || !state.isLoginUser) &&
 						<Fade in={true}><Alert severity="error">ログインしてください！</Alert></Fade>
 				}
 				{
@@ -256,7 +260,7 @@ export const MyPage = () => {
 				}
 			</MessageWrapper>
 				{
-					cookies.accessToken &&
+					cookies.accessToken && state.isLoginUser &&
 					<Stack spacing={8} alignItems="center">	
 					{
 					fetchState.fetching &&

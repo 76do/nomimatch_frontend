@@ -93,14 +93,18 @@ export const LogIn = () => {
 					 }
 		LogInRequest(params)
 		.then((resData)=>{
-			let cookieDate = new Date()
-			cookieDate.setDate(cookieDate.getDate()+7);
-			setCookie("accessToken", resData.headers['accesstoken'], {expires: cookieDate, sameSite: 'none', secure: true, path: '/'})
-			if(location.state === undefined){
-				history.push("/mypage",{loginNotice: true});
-			}else{
-				history.push(location.state.redirectUrl);
-			}
+			new Promise((resolve) => {
+				let cookieDate = new Date()
+				cookieDate.setDate(cookieDate.getDate()+7);
+				setCookie("accessToken", resData.headers['accesstoken'], {expires: cookieDate, sameSite: 'none', secure: true, path: '/'});
+				resolve()
+			}).then(() =>{
+				if(location.state === undefined){
+					history.push("/mypage",{loginNotice: true});
+				}else{
+					history.push(location.state.redirectUrl);
+				}
+			});
 		}).catch((e) => {
 			if(e.response.status === HTTP_STATUS_CODE.UNAUTHORIZED){
 				setState({

@@ -86,8 +86,10 @@ export const Chats = () => {
 	const initialState = {
 		isChatsEmpty: false,
 		hasChats: false,
+		isLoginUser: true,
 	}
 	const cookies  = useCookies(['accessToken'])[0];
+	const removeCookie = useCookies(['accessToken'])[2];
 	const [state, setState] = useState(initialState);
 	const [chatsInfo, setChatsInfo] = useState([]);
 	const initialFetchState = {
@@ -153,6 +155,8 @@ export const Chats = () => {
 			}
 			setFetchState({fetching: false, fetched: true});
 		}).catch((e) => {
+			setState({...state, isLoginUser: false});
+			removeCookie('accessToken', {path: '/'});
 		})
 	},[])
 
@@ -161,11 +165,11 @@ export const Chats = () => {
 			<ThemeProvider theme={Theme}>
 			<Container maxWidth='lg'>
 				{
-					cookies.accessToken === undefined &&
+					((cookies.accessToken === undefined) || !state.isLoginUser) &&
 						<Fade in={true}><Alert severity="error">ログインしてください！</Alert></Fade>
 				}
 				{
-					cookies.accessToken &&
+					cookies.accessToken && state.isLoginUser &&
 					<>
 					<ChatsTitle>
 					メッセージ
