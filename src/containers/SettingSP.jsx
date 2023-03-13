@@ -35,6 +35,7 @@ export const SettingSP = () => {
 		},
 	});
 	const cookies  = useCookies(['accessToken'])[0];
+	const removeCookie = useCookies(['accessToken'])[2];
 	const {userInfo, setUserInfo} = useContext(UserInfoContext);
 	const initialFetchState = {
 		fetching: true,
@@ -138,6 +139,7 @@ export const SettingSP = () => {
 				setUserInfo({id: data['data'].id, name: data['data']['attributes']['name'], random_id: data['data']['attributes']['random_id'] })
 				setFetchState({fetching: false, fetched: true})
 			}).catch((e) => {
+				removeCookie('accessToken', {path: '/'});
 			})
 		}else{
 			setFetchState({fetching: false, fetched: true})

@@ -118,8 +118,9 @@ export const MyPage = () => {
 		borderRadius: 10,
 		border: '3px solid',
 		borderColor: theme.palette.main.primary,
+		width: '80%',
 		"@media screen and (max-width:480px)":{
-			width: '90%',
+			width: '100%',
 		},
 	}));
 
@@ -168,12 +169,13 @@ export const MyPage = () => {
 
 	function renderRow(props) {
   	const { index, style } = props;
+	const createdAt = requests[index]['attributes']['created_at'].slice(0,-5);
 
   	return (
     	<ListItem style={style} key={index} component="div" disablePadding >
       		<ListItemButton>
         		<ListItemText 
-				primary={`${requests[index]['attributes']['sender_name']} ${requests[index]['attributes']['created_at']}`}
+				primary={`${requests[index]['attributes']['sender_name']} ${createdAt}`}
 				onClick={()=>{
 					setState({...state, isOpenDialog: true});
 					setDialogInfo({
@@ -325,7 +327,7 @@ export const MyPage = () => {
 							<RequestsListWrapper>
 							<FixedSizeList
    							height={400}
-   							width={360}
+   							width={'100%'}
    							itemSize={46}
    							itemCount={requests.length}
    							overscanCount={5}

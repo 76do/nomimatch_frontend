@@ -13,6 +13,7 @@ import{
 import { LogOut } from '../apis/LogOut';
 import { useCookies } from 'react-cookie';
 import SettingsOutlinedIcon from '@mui/icons-material/SettingsOutlined';
+import { HTTP_STATUS_CODE } from '../constants'
 
 export const LoginHeader = () => {
 
@@ -58,7 +59,12 @@ export const LoginHeader = () => {
 		.then(() => {
 			removeCookie('accessToken', {path: '/'})
 			history.push("/",{logoutNotice: true})
-		}).catch(
+		}).catch((e) => {
+			if(e.response.status === HTTP_STATUS_CODE.UNAUTHORIZED){
+				removeCookie('accessToken', {path: '/'})
+				history.push("/",{logoutNotice: true})
+			}
+		}
 		)}
 	};
 
